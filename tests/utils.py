@@ -66,12 +66,11 @@ class Tokenizer:
 
         tokens = []
         for token in token_stream.tokens:
-            if token.type != -1:  # EOF
-                token_name = lexer.symbolicNames[token.type]
-                token_text = token.text if token.text else ""
-                tokens.append(f"{token_name},{token_text}")
+            if token.type == -1:  # EOF
+                tokens.append("<EOF>")
+            else:
+                tokens.append(token.text)
 
-        tokens.append("EOF")
         return ",".join(tokens)
 
 
