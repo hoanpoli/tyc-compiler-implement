@@ -53,21 +53,17 @@ decl_type: type | AUTO;
 
 type: INT | FLOAT_KW | STRING | ID;
 
-assign_expr: ID ASSIGN assign_expr | primary_expr;
-primary_expr: ID
-            | INTLIT
-            | FLOATLIT
-            | STRINGLIT
-            | LP expr RP;
+if_stmt: matched_if | unmatched_if;
+matched_if: IF LP expr RP LB stmt_list RB ELSE block_stmt;
+unmatched_if: IF LP expr RP block_stmt | IF LP expr RP matched_if ELSE unmatched_if;
 
-if_stmt: expr;
 while_stmt: WHILE LP expr LP LB stmt_list RB;
 for_stmt: FOR LP for_init SEMI_COLON for_cond SEMI_COLON for_update RP LB stmt_list RB;
 for_init: var_decl | expr | ;
 for_cond: expr | ;
 for_update: expr | ;
 
-switch_stmt: SWITCH LP expr RP LB switch_body RB;
+switch_stmt: SWITCH LP expr LP LB switch_body RB;
 switch_body: default_then_cases
             | cases_then_default
             | cases_default_cases
@@ -78,14 +74,77 @@ cases_then_default: case_list default_clause;
 cases_default_cases: case_list default_clause case_list;
 cases_only: case_list;
 case_list : case_clause case_list | case_clause;
-case_clause: CASE expr COLON stmt_list break_stmt?;
+case_clause: CASE case_expr COLON stmt_list break_stmt?;
 default_clause: DEFAULT COLON stmt_list break_stmt?;
+
+case_expr: case_add;
+case_add: case_mul case_add_tail;
+case_add_tail: ADD case_mul case_add_tail | SUB case_mul case_add_tail | ;
+case_mul: case_unary case_mul_tail;
+case_mul_tail: MUL case_add case_mul_tail 
+                | DIV case_add case_mul_tail
+                | MOD case_add case_mul_tail
+                | ;
+case_unary: ADD case_unary | SUB case_unary | case_primary;
+case_primary: INTLIT | LP case_expr RP;
 
 break_stmt: BREAK SEMI_COLON;
 continue_stmt: CONTINUE SEMI_COLON;
 return_stmt: RETURN expr SEMI_COLON | RETURN SEMI_COLON;
+
 expr_stmt: expr SEMI_COLON;
-expr: assign_expr | primary_expr;
+
+expr: assign_expr;
+assign_expr: postfix ASSIGN assign_expr | logic_or_expr;
+logic_or_expr: logic_and logic_or_tail;
+logic_or_tail: OR logic_and logic_or_tail | ;
+logic_and: equality logic_and_tail;
+logic_and_tail: AND equality logic_and_tail | ;
+equality: relational equality_tail;
+equality_tail: EQUAL relational equality_tail
+                | NOT_EQUAL relational equality_tail
+                | ;
+
+relational: additive relational_tail;
+
+relational_tail: LESS_THAN additive relational_tail
+                | GREATER_THAN additive relational_tail
+                | LESS_THAN_OR_EQUAL additive relational_tail
+                | GREATER_THAN_OR_EQUAL additive relational_tail 
+                | ;
+
+additive: multiplicative additive_tail;
+
+additive_tail: ADD multiplicative additive_tail
+                | SUB multiplicative additive_tail
+                | ;
+
+multiplicative: unary multiplicative_tail;
+
+multiplicative_tail: MUL unary multiplicative_tail 
+                    | DIV unary multiplicative_tail
+                    | MOD unary multiplicative_tail
+                    | ;
+
+unary: NOT unary
+        | INC unary
+        | DEC unary
+        | SUB unary
+        | postfix;
+
+postfix: postfix DOT ID
+        | postfix LP argument_list RP
+        | postfix INC
+        | postfix DEC
+        | primary_expr;
+
+primary_expr: ID
+            | INTLIT
+            | FLOATLIT
+            | STRINGLIT
+            | LP expr RP;
+argument_list: expr argument_tail | ;
+argument_tail: COMMA expr argument_tail | ;
 
 LINE_COMMENT: '//' ~[\r\n]* -> skip;
 BLOCK_COMMENT: '/*' .*? '*/' -> skip;
