@@ -35,7 +35,7 @@ return_type: type | VOID;
 param_list: param_prime | ;
 param_prime: param_decl COMMA param_list | param_decl;
 param_decl: type ID;
-stmt_list: stmt stmt_list | stmt;
+stmt_list: stmt stmt_list | ;
 
 struct_decl: STRUCT ID LB struct_body_list RB SEMI_COLON;
 struct_body_list: struct_prime | ;
@@ -45,7 +45,6 @@ struct_body: type ID;
 stmt: var_decl_stmt | block_stmt | if_stmt | while_stmt | for_stmt | switch_stmt | break_stmt | continue_stmt | return_stmt | expr_stmt;
 
 var_decl_stmt: decl_type ID SEMI_COLON | decl_type ID ASSIGN expr SEMI_COLON;
-var_decl: decl_type ID;
 
 block_stmt: LB stmt_list RB;
 
@@ -54,16 +53,18 @@ decl_type: type | AUTO;
 type: INT | FLOAT_KW | STRING | ID;
 
 if_stmt: matched_if | unmatched_if;
-matched_if: IF LP expr RP LB stmt_list RB ELSE block_stmt;
-unmatched_if: IF LP expr RP block_stmt | IF LP expr RP matched_if ELSE unmatched_if;
+matched_if: IF LP expr RP stmt ELSE stmt;
+unmatched_if: IF LP expr RP stmt | IF LP expr RP matched_if ELSE unmatched_if;
 
-while_stmt: WHILE LP expr LP LB stmt_list RB;
-for_stmt: FOR LP for_init SEMI_COLON for_cond SEMI_COLON for_update RP LB stmt_list RB;
-for_init: var_decl | expr | ;
+while_stmt: WHILE LP expr RP stmt;
+for_stmt: FOR LP for_init SEMI_COLON for_cond SEMI_COLON for_update RP stmt;
+for_init: for_var_decl | expr | ;
+for_var_decl: decl_type ID | decl_type ID ASSIGN expr;
+
 for_cond: expr | ;
 for_update: expr | ;
 
-switch_stmt: SWITCH LP expr LP LB switch_body RB;
+switch_stmt: SWITCH LP expr RP LB switch_body RB;
 switch_body: default_then_cases
             | cases_then_default
             | cases_default_cases
@@ -78,14 +79,20 @@ case_clause: CASE case_expr COLON stmt_list break_stmt?;
 default_clause: DEFAULT COLON stmt_list break_stmt?;
 
 case_expr: case_add;
-case_add: case_mul case_add_tail;
-case_add_tail: ADD case_mul case_add_tail | SUB case_mul case_add_tail | ;
-case_mul: case_unary case_mul_tail;
-case_mul_tail: MUL case_add case_mul_tail 
-                | DIV case_add case_mul_tail
-                | MOD case_add case_mul_tail
-                | ;
-case_unary: ADD case_unary | SUB case_unary | case_primary;
+
+case_add: case_add ADD case_mul
+        | case_add SUB case_mul
+        | case_mul;
+
+case_mul: case_mul MUL case_unary
+        | case_mul DIV case_unary
+        | case_mul MOD case_unary
+        | case_unary;
+
+case_unary: ADD case_unary
+            | SUB case_unary
+            | case_primary;
+
 case_primary: INTLIT | LP case_expr RP;
 
 break_stmt: BREAK SEMI_COLON;
@@ -95,43 +102,33 @@ return_stmt: RETURN expr SEMI_COLON | RETURN SEMI_COLON;
 expr_stmt: expr SEMI_COLON;
 
 expr: assign_expr;
-assign_expr: postfix ASSIGN assign_expr | logic_or_expr;
-logic_or_expr: logic_and logic_or_tail;
-logic_or_tail: OR logic_and logic_or_tail | ;
-logic_and: equality logic_and_tail;
-logic_and_tail: AND equality logic_and_tail | ;
-equality: relational equality_tail;
-equality_tail: EQUAL relational equality_tail
-                | NOT_EQUAL relational equality_tail
-                | ;
+assign_expr: logic_or_expr | postfix ASSIGN assign_expr;
+logic_or_expr: logic_or_expr OR logic_and_expr | logic_and_expr;
+logic_and_expr: logic_and_expr AND equality_expr | equality_expr;
+equality_expr: equality_expr EQUAL relational_expr
+                | equality_expr NOT_EQUAL relational_expr
+                | relational_expr;
 
-relational: additive relational_tail;
+relational_expr: relational_expr LESS_THAN additive_expr
+                | relational_expr GREATER_THAN additive_expr
+                | relational_expr LESS_THAN_OR_EQUAL additive_expr
+                | relational_expr GREATER_THAN_OR_EQUAL additive_expr
+                | additive_expr;
 
-relational_tail: LESS_THAN additive relational_tail
-                | GREATER_THAN additive relational_tail
-                | LESS_THAN_OR_EQUAL additive relational_tail
-                | GREATER_THAN_OR_EQUAL additive relational_tail 
-                | ;
+additive_expr: additive_expr ADD multiplicative_expr
+                | additive_expr SUB multiplicative_expr
+                | multiplicative_expr;
 
-additive: multiplicative additive_tail;
+multiplicative_expr: multiplicative_expr MUL unary_expr
+                    | multiplicative_expr DIV unary_expr
+                    | multiplicative_expr MOD unary_expr
+                    | unary_expr;
 
-additive_tail: ADD multiplicative additive_tail
-                | SUB multiplicative additive_tail
-                | ;
-
-multiplicative: unary multiplicative_tail;
-
-multiplicative_tail: MUL unary multiplicative_tail 
-                    | DIV unary multiplicative_tail
-                    | MOD unary multiplicative_tail
-                    | ;
-
-unary: NOT unary
-        | INC unary
-        | DEC unary
-        | SUB unary
-        | postfix;
-
+unary_expr: INC unary_expr
+            | DEC unary_expr
+            | NOT unary_expr
+            | SUB unary_expr
+            | postfix;
 postfix: postfix DOT ID
         | postfix LP argument_list RP
         | postfix INC
@@ -143,6 +140,7 @@ primary_expr: ID
             | FLOATLIT
             | STRINGLIT
             | LP expr RP;
+
 argument_list: expr argument_tail | ;
 argument_tail: COMMA expr argument_tail | ;
 
