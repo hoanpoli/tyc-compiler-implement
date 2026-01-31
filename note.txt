@@ -1,0 +1,75 @@
+- Lỗi nào sinh ra bởi PT Cú pháp: vd dòng 3 cột 1 Token HASH không được mong chờ tại đây
+- Lỗi tên chưa được khai báo , hoặc lỗi kiểu của biểu thức không phù hợp (nằm trong  slide ??)
+if (3.14) hoặc if (x) không bắt lỗi ở btl số 1, mà ở btl3
+
+
+Sơ đồ ??
+
+
+
+
+W3 Syntax analytic
+Vai trò của 1 phân tích ngữ pháp
+Văn phạm phi ngữ cảnh: 
+	định nghĩa (tập bđ, kt); 
+	Chuỗi dẫn xuất (VD: chuỗi dẫn xuất trái nhất)
+	Văn phạm nhặp nhằng.
+Viết văn phạm	
+	2 kiểu chính 
+		-BNF: Sử dụng đệ quy để lặp lại, vd :  xlist-> 
+		-EBNF ( sử dụng *, +, ? ) , vd (ID COMMA)*
+	5 dạng thường gặp nhất khi viết văn phạm
+		-Danh sách các x không rỗng: 
+			 ids: ID ids | ID;   (or ids: ID+)
+
+		-Danh sách các x có thể rỗng, cú pháp: 
+			 stmtlist: smtmt stmtlist | ;   or EBNF (stmtlist: smtmt*);
+
+		-Ds các x cách bởi y không rỗng:    
+			 paramlist: param SEMI paramlist | param; or paramlist: param (SEMI param)*;
+
+		-Ds các x cách bởi y có thể rỗng:   
+			 paramlist: paramprime | ;
+			 paramprime: param SEMI paramprime | param;
+
+			or  paramlist: (param (SEMI param)*)?;
+		-Van pham cho bieu thức trung tố :
+			(có toán tử trung tố, độ ưu tiên, tính kết hợp, càng gần gốc độ ưu tiên càng thấp, đệ quy trái kết hợp trái, k đệ quy k kết hợp)
+
+
+'0' | [1-9] ('_'?[0-9]+)*  , action block để xoá kí tự _ khi ra kết quả
+self.text = self.text.replace('_', '') , xem thêm về self.tokenName
+Lưu ý, action block chỉ áp dụng đc với luật sinh gần nhất, tức là cái cuối cùng sau dấu '|'
+
+
+program: decllist EOF;
+declist: decl declist | decl;
+decl: vardecl | funcdecl;
+
+
+vardecl: typ idlist SEMI;
+typ: INT | FLOAT;
+idlist: ID CM ID | ID;
+
+funcdecl: typ ID paramdecl body;
+paramdecl: LP paramlist RP;
+paramlist: paramprime | ;
+paramprime: param SEMI paramprime | param;
+param: typ idlist;
+
+body: LB smtmlist RB; 
+stmtlist: stmt stmtlist | ;
+stmt: assignstmt | callstmt | rtnstmt | vardecl;
+asigntstmt: ID EQ expr SEMI;
+callstmt: ID LP exprlist RP SEMI;
+exprlist: exprprime | ;
+exprprime: expr CM exprprime | epxr;
+rtnstmt: RETURN expr SEMI;
+
+INT: 'int';
+FLOAT: 'float';
+ID: [a-zA-Z]+;
+CM: ',';
+SEMI: ';';
+LP: '(;
+LB: '{';
