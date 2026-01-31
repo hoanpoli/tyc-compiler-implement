@@ -44,7 +44,7 @@ struct_body: type ID;
 
 stmt: var_decl_stmt | block_stmt | if_stmt | while_stmt | for_stmt | switch_stmt | break_stmt | continue_stmt | return_stmt | expr_stmt;
 
-var_decl_stmt: var_decl assign_expr SEMI_COLON;
+var_decl_stmt: decl_type ID SEMI_COLON | decl_type ID ASSIGN expr SEMI_COLON;
 var_decl: decl_type ID;
 
 block_stmt: LB stmt_list RB;
@@ -53,16 +53,39 @@ decl_type: type | AUTO;
 
 type: INT | FLOAT_KW | STRING | ID;
 
-assign_expr: ASSIGN expr | ;
+assign_expr: ID ASSIGN assign_expr | primary_expr;
+primary_expr: ID
+            | INTLIT
+            | FLOATLIT
+            | STRINGLIT
+            | LP expr RP;
+
 if_stmt: expr;
-while_stmt: expr;
-for_stmt: expr;
-switch_stmt: expr;
-break_stmt: expr;
-continue_stmt: expr;
-return_stmt: expr;
+while_stmt: WHILE LP expr LP LB stmt_list RB;
+for_stmt: FOR LP for_init SEMI_COLON for_cond SEMI_COLON for_update RP LB stmt_list RB;
+for_init: var_decl | expr | ;
+for_cond: expr | ;
+for_update: expr | ;
+
+switch_stmt: SWITCH LP expr RP LB switch_body RB;
+switch_body: default_then_cases
+            | cases_then_default
+            | cases_default_cases
+            | cases_only;
+
+default_then_cases: default_clause case_list;
+cases_then_default: case_list default_clause;
+cases_default_cases: case_list default_clause case_list;
+cases_only: case_list;
+case_list : case_clause case_list | case_clause;
+case_clause: CASE expr COLON stmt_list break_stmt?;
+default_clause: DEFAULT COLON stmt_list break_stmt?;
+
+break_stmt: BREAK SEMI_COLON;
+continue_stmt: CONTINUE SEMI_COLON;
+return_stmt: RETURN expr SEMI_COLON | RETURN SEMI_COLON;
 expr_stmt: expr SEMI_COLON;
-expr: ID;
+expr: assign_expr | primary_expr;
 
 LINE_COMMENT: '//' ~[\r\n]* -> skip;
 BLOCK_COMMENT: '/*' .*? '*/' -> skip;
@@ -117,7 +140,7 @@ ID: [a-zA-Z_][a-zA-Z_0-9]*;
 
 INTLIT: '-'?[0-9]+;
 FLOATLIT: '-'? ( [0-9]+ '.' [0-9]* ([eE] [+-]? [0-9]+)? | '.' [0-9]+ ([eE] [+-]? [0-9]+)? | [0-9]+ [eE] [+-]? [0-9]+ ) ;
-STRINGLIT: '"' ( '\\' [bfrnt\\"] | ~["\\\r\n] )* '"';
+STRINGLIT: '"' ( '\\' [bfrnt\\"] | ~["\\\r\n] )* '"' { self.text = self.text[1:-1] };
 
 WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs
 
