@@ -26,7 +26,7 @@ options{
 
 // TODO: Define grammar rules here
 program: decl_list EOF;
-decl_list: decl decl_list | decl;
+decl_list: decl decl_list | ;
 decl: struct_decl | func_decl;
 
 func_decl: func_return ID LP param_list RP LB stmt_list RB;
@@ -65,18 +65,12 @@ for_cond: expr | ;
 for_update: expr | ;
 
 switch_stmt: SWITCH LP expr RP LB switch_body RB;
-switch_body: default_then_cases
-            | cases_then_default
-            | cases_default_cases
-            | cases_only;
+switch_body: switch_item_list | ;
+switch_item_list: switch_item switch_item_list | switch_item;
+switch_item: case_clause | default_clause;
 
-default_then_cases: default_clause case_list;
-cases_then_default: case_list default_clause;
-cases_default_cases: case_list default_clause case_list;
-cases_only: case_list;
-case_list : case_clause case_list | case_clause;
-case_clause: CASE case_expr COLON stmt_list break_stmt?;
-default_clause: DEFAULT COLON stmt_list break_stmt?;
+case_clause: CASE case_expr COLON stmt_list;
+default_clause: DEFAULT COLON stmt_list;
 
 case_expr: case_add;
 
@@ -140,7 +134,10 @@ primary_expr: ID
             | INTLIT
             | FLOATLIT
             | STRINGLIT
-            | LP expr RP;
+            | LP expr RP
+            | struct_literal;
+
+struct_literal: LB argument_list RB;
 
 argument_list: expr argument_tail | ;
 argument_tail: COMMA expr argument_tail | ;
