@@ -124,10 +124,11 @@ multiplicative_expr: multiplicative_expr MUL unary_expr
                     | multiplicative_expr MOD unary_expr
                     | unary_expr;
 
-unary_expr: INC unary_expr
-            | DEC unary_expr
-            | NOT unary_expr
+unary_expr: NOT unary_expr
+            | ADD unary_expr
             | SUB unary_expr
+            | INC unary_expr
+            | DEC unary_expr
             | postfix;
 postfix: postfix DOT ID
         | postfix LP argument_list RP
