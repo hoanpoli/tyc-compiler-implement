@@ -38,9 +38,9 @@ param_decl: type ID;
 stmt_list: stmt stmt_list | ;
 
 struct_decl: STRUCT ID LB struct_body_list RB SEMI_COLON;
-struct_body_list: struct_prime | ;
-struct_prime: struct_body SEMI_COLON struct_body_list | struct_body;
-struct_body: type ID;
+struct_body_list: struct_member_list | ;
+struct_member_list: struct_body struct_body_list | struct_body;
+struct_body: type ID SEMI_COLON;
 
 stmt: var_decl_stmt | block_stmt | if_stmt | while_stmt | for_stmt | switch_stmt | break_stmt | continue_stmt | return_stmt | expr_stmt;
 
@@ -148,23 +148,23 @@ argument_tail: COMMA expr argument_tail | ;
 LINE_COMMENT: '//' ~[\r\n]* -> skip;
 BLOCK_COMMENT: '/*' .*? '*/' -> skip;
 
+LESS_THAN_OR_EQUAL: '<=';
+GREATER_THAN_OR_EQUAL: '>=';
+EQUAL: '==';
 ASSIGN: '=';
+INC: '++';
+DEC: '--';
 ADD: '+';
 SUB: '-';
 MUL: '*';
 DIV: '/';
 MOD: '%';
 NOT_EQUAL: '!=';
-EQUAL: '==';
 LESS_THAN: '<';
 GREATER_THAN: '>';
-LESS_THAN_OR_EQUAL: '<=';
-GREATER_THAN_OR_EQUAL: '>=';
 OR: '||';
 AND: '&&';
 NOT: '!';
-INC: '++';
-DEC: '--';
 
 LSB: '[';
 RSB:']';
@@ -196,12 +196,15 @@ WHILE: 'while';
 
 ID: [a-zA-Z_][a-zA-Z_0-9]*;
 
-INTLIT: '-'?[0-9]+;
-FLOATLIT: '-'? ( [0-9]+ '.' [0-9]* ([eE] [+-]? [0-9]+)? | '.' [0-9]+ ([eE] [+-]? [0-9]+)? | [0-9]+ [eE] [+-]? [0-9]+ ) ;
-STRINGLIT: '"' ( '\\' [bfrnt\\"] | ~["\\\r\n] )* '"' { self.text = self.text[1:-1] };
+INTLIT: [0-9]+;
+FLOATLIT: ( [0-9]+ '.' [0-9]* ([eE] [+-]? [0-9]+)? | '.' [0-9]+ ([eE] [+-]? [0-9]+)? | [0-9]+ [eE] [+-]? [0-9]+ ) ;
+
+ILLEGAL_ESCAPE: '"' ( ESC_SEQ | ~["\\\r\n] )* '\\' ~[bfrnt"\\\r\n] { self.text = self.text[1:]; };
+UNCLOSE_STRING: '"' (ESC_SEQ | ~["\\\r\n])* { self.text = self.text[1:] };
+STRINGLIT : '"' ( ESC_SEQ | ~["\\\r\n] )* '"' { self.text = self.text[1:-1]; };
+
+fragment ESC_SEQ: '\\' [bfrnt"\\];
 
 WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs
 
-ILLEGAL_ESCAPE: '"' (('\\'[bfrnt\\"]|~[\n\\"]))* ('\\'(~[bfrnt\\"]));
-UNCLOSE_STRING:  '"'('\\'[bfrnt\\"]|~[\r\t\n\\"])* ;
 ERROR_CHAR: . ;
