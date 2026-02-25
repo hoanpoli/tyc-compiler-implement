@@ -407,7 +407,7 @@ def test_84_break_continue_in_loop():
 
 
 def test_85_chained_member_call():
-    assert Parser("void main() { a.b().c = 1; }").parse() == "success"
+    assert Parser("void main() { a.b.c = 1; }").parse() == "success"
 
 
 def test_86_invalid_global_stmt():

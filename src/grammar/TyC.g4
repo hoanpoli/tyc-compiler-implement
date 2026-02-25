@@ -97,7 +97,8 @@ return_expr: expr | ;
 expr_stmt: expr SEMI_COLON;
 
 expr: assign_expr;
-assign_expr: logic_or_expr | logic_or_expr ASSIGN assign_expr;
+assign_expr: lhs ASSIGN assign_expr | logic_or_expr;
+lhs: ID | lhs DOT ID;
 logic_or_expr: logic_or_expr OR logic_and_expr | logic_and_expr;
 logic_and_expr: logic_and_expr AND equality_expr | equality_expr;
 equality_expr: equality_expr EQUAL relational_expr
