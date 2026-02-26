@@ -6,8 +6,9 @@ from src.utils.nodes import *
 
 class ASTGeneration(TyCVisitor):
     def visitProgram(self, ctx: TyCParser.ProgramContext):
-        decls = self.visit(ctx.decl_list())
-        return Program(decls if decls else [])
+        if ctx.getChildCount() == 0:
+            return Program([])
+        return Program(self.visit(ctx.decl_list()))
 
     def visitDecl(self, ctx: TyCParser.DeclContext):
         return self.visitChildren(ctx)
@@ -15,9 +16,7 @@ class ASTGeneration(TyCVisitor):
     def visitDecl_list(self, ctx: TyCParser.Decl_listContext):
         if ctx.getChildCount() == 0:
             return []
-        if ctx.getChildCount() == 1:
-            return [self.visit(ctx.decl())]
-        return self.visit(ctx.decl_list()) + [self.visit(ctx.decl())]
+        return [self.visit(ctx.decl())] + self.visit(ctx.decl_list())
 
     def visitFunc_decl(self, ctx: TyCParser.Func_declContext):
         return_type = self.visit(ctx.func_return())
@@ -47,7 +46,9 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#stmt_list.
     def visitStmt_list(self, ctx: TyCParser.Stmt_listContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return []
+        return [self.visit(ctx.stmt())] + self.visit(ctx.stmt_list())
 
     # Visit a parse tree produced by TyCParser#struct_decl.
     def visitStruct_decl(self, ctx: TyCParser.Struct_declContext):
@@ -186,7 +187,8 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#return_stmt.
     def visitReturn_stmt(self, ctx: TyCParser.Return_stmtContext):
-        return self.visitChildren(ctx)
+        expr = self.visit(ctx.expr()) if ctx.expr() else None
+        return ReturnStmt(expr)
 
     # Visit a parse tree produced by TyCParser#return_expr.
     def visitReturn_expr(self, ctx: TyCParser.Return_exprContext):
@@ -194,7 +196,7 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#expr_stmt.
     def visitExpr_stmt(self, ctx: TyCParser.Expr_stmtContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.expr())
 
     # Visit a parse tree produced by TyCParser#expr.
     def visitExpr(self, ctx: TyCParser.ExprContext):
@@ -203,35 +205,53 @@ class ASTGeneration(TyCVisitor):
     # Visit a parse tree produced by TyCParser#assign_expr.
     def visitAssign_expr(self, ctx: TyCParser.Assign_exprContext):
         if ctx.getChildCount() == 1:
-            return self.visitChildren(ctx)
+            return self.visit(ctx.logic_or_expr())
         left = self.visit(ctx.lhs())
         right = self.visit(ctx.assign_expr())
         return AssignExpr(left, right)
 
     # Visit a parse tree produced by TyCParser#lhs.
     def visitLhs(self, ctx: TyCParser.LhsContext):
-        return self.visitChildren(ctx)
+        return Identifier(ctx.ID().getText())
 
     # Visit a parse tree produced by TyCParser#logic_or_expr.
     def visitLogic_or_expr(self, ctx: TyCParser.Logic_or_exprContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.logic_and_expr())
+        left = self.visit(ctx.logic_or_expr())
+        right = self.visit(ctx.logic_and_expr())
+        return BinaryOp(ctx.OR().getText(), left, right)
 
     # Visit a parse tree produced by TyCParser#logic_and_expr.
     def visitLogic_and_expr(self, ctx: TyCParser.Logic_and_exprContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.equality_expr())
+        left = self.visit(ctx.logic_and_expr())
+        right = self.visit(ctx.equality_expr())
+        return BinaryOp(ctx.AND().getText(), left, right)
 
     # Visit a parse tree produced by TyCParser#equality_expr.
     def visitEquality_expr(self, ctx: TyCParser.Equality_exprContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.relational_expr())
+        left = self.visit(ctx.relational_expr())
+        op = ctx.getChild(1).getText()
+        right = self.visit(ctx.relational_expr())
+        return BinaryOp(op, left, right)
 
     # Visit a parse tree produced by TyCParser#relational_expr.
     def visitRelational_expr(self, ctx: TyCParser.Relational_exprContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.additive_expr())
+        left = self.visit(ctx.additive_expr())
+        op = ctx.getChild(1).getText()
+        right = self.visit(ctx.additive_expr())
+        return BinaryOp(op, left, right)
 
     # Visit a parse tree produced by TyCParser#additive_expr.
     def visitAdditive_expr(self, ctx: TyCParser.Additive_exprContext):
         if ctx.getChildCount() == 1:
-            return self.visitChildren(ctx)
+            return self.visit(ctx.multiplicative_expr())
         left = self.visit(ctx.additive_expr())
         op = ctx.getChild(1).getText()
         right = self.visit(ctx.multiplicative_expr())
@@ -240,7 +260,7 @@ class ASTGeneration(TyCVisitor):
     # Visit a parse tree produced by TyCParser
     def visitMultiplicative_expr(self, ctx: TyCParser.Multiplicative_exprContext):
         if ctx.getChildCount() == 1:
-            return self.visitChildren(ctx)
+            return self.visit(ctx.unary_expr())
         left = self.visit(ctx.multiplicative_expr())
         op = ctx.getChild(1).getText()
         right = self.visit(ctx.unary_expr())
@@ -252,18 +272,22 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#prefix_expr.
     def visitPrefix_expr(self, ctx: TyCParser.Prefix_exprContext):
-        return self.visitChildren(ctx)
+        right = self.visit(ctx.unary_expr())
+        return PrefixOp(ctx.getChild(0).getText(), right)
 
     # Visit a parse tree produced by TyCParser#postfix_expr.
     def visitPostfix_expr(self, ctx: TyCParser.Postfix_exprContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.primary_expr())
+        return 
 
     # Visit a parse tree produced by TyCParser#postfix_suffix.
     def visitPostfix_suffix(self, ctx: TyCParser.Postfix_suffixContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount == 2:
+            return ctx.getChild(1).getText()
+        return self.visit(ctx.argument_list())
 
     # Visit a parse tree produced by TyCParser#primary_expr.
-
     def visitPrimary_expr(self, ctx: TyCParser.Primary_exprContext):
         if ctx.ID():
             return Identifier(ctx.ID().getText())
@@ -279,30 +303,16 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#struct_literal.
     def visitStruct_literal(self, ctx: TyCParser.Struct_literalContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.argument_list())
 
     # Visit a parse tree produced by TyCParser#argument_list.
     def visitArgument_list(self, ctx: TyCParser.Argument_listContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return []
+        return [self.visit(ctx.expr)] + self.visit(ctx.argument_tail())
 
     # Visit a parse tree produced by TyCParser#argument_tail.
     def visitArgument_tail(self, ctx: TyCParser.Argument_tailContext):
-        return self.visitChildren(ctx)
-
-    def visitStmt_list(self, ctx: TyCParser.Stmt_listContext):
         if ctx.getChildCount() == 0:
             return []
-        return self.visit(ctx.stmt_list()) + [self.visit(ctx.stmt())]
-
-    def visitReturn_stmt(self, ctx: TyCParser.Return_stmtContext):
-        expr = self.visit(ctx.expr()) if ctx.expr() else None
-        return ReturnStmt(expr)
-
-    def visitExpr_stmt(self, ctx: TyCParser.Expr_stmtContext):
-        return self.visit(ctx.expr())
-
-    def visitExpr(self, ctx: TyCParser.ExprContext):
-        return self.visitChildren(ctx)
-
-    def visitLhs(self, ctx: TyCParser.LhsContext):
-        return Identifier(ctx.ID().getText())
+        return [self.visit(ctx.expr)] + self.visit(ctx.argument_tail())
