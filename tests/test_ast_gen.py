@@ -25,6 +25,5 @@ def test3_ast_gen_placeholder():
     source = """void main() {
     foo(a, b, c);
 }"""
-    expected = (
-        "Program([FuncDecl(VoidType(), main, [], BlockStmt([ExprStmt(FuncCall(foo, [Identifier(a), Identifier(b), Identifier(c)]))]))])")
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([FuncCall(Identifier(foo), [Identifier(a), Identifier(b), Identifier(c)])]))])"
     assert str(ASTGenerator(source).generate()) == expected
