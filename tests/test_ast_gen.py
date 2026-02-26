@@ -11,8 +11,5 @@ def test_ast_gen_placeholder():
     """Placeholder test - replace with actual test cases"""
     source = """void main() {
 }"""
-    # TODO: Add actual test assertions
-    # Example:
-    # expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([]))])"
-    # assert str(ASTGenerator(source).generate()) == expected
-    assert True
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([]))])"
+    assert str(ASTGenerator(source).generate()) == expected
