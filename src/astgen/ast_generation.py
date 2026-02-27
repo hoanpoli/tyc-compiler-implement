@@ -34,7 +34,7 @@ class ASTGeneration(TyCVisitor):
         if ctx.VOID():
             return VoidType()
         if ctx.AUTO():
-            return ctx.AUTO().getText()
+            return None
         return self.visit(ctx.type_()) if ctx.type_() else None
 
     def visitParam_list(self, ctx: TyCParser.Param_listContext):
@@ -137,7 +137,9 @@ class ASTGeneration(TyCVisitor):
     def visitFor_init(self, ctx: TyCParser.For_initContext):
         if ctx.getChildCount() == 0:
             return None
-        return self.visitChildren(ctx)
+        if ctx.for_var_decl():
+            return self.visit(ctx.for_var_decl())
+        return ExprStmt(self.visit(ctx.expr()))
 
     # Visit a parse tree produced by TyCParser#for_var_decl.
     def visitFor_var_decl(self, ctx: TyCParser.For_var_declContext):
@@ -159,15 +161,32 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#switch_stmt.
     def visitSwitch_stmt(self, ctx: TyCParser.Switch_stmtContext):
-        return self.visitChildren(ctx)
+        expr = self.visit(ctx.expr())
+
+        cases = []
+        default_case = None
+
+        if ctx.switch_body():
+            items = self.visit(ctx.switch_body())
+
+            for item in items:
+                if isinstance(item, CaseStmt):
+                    cases.append(item)
+                else:
+                    default_case = item
+        return SwitchStmt(expr, cases, default_case)
 
     # Visit a parse tree produced by TyCParser#switch_body.
     def visitSwitch_body(self, ctx: TyCParser.Switch_bodyContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return []
+        return self.visit(ctx.switch_item_list())
 
     # Visit a parse tree produced by TyCParser#switch_item_list.
     def visitSwitch_item_list(self, ctx: TyCParser.Switch_item_listContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return [self.visit(ctx.switch_item())]
+        return [self.visit(ctx.switch_item())] + self.visit(ctx.switch_item_list())
 
     # Visit a parse tree produced by TyCParser#switch_item.
     def visitSwitch_item(self, ctx: TyCParser.Switch_itemContext):
@@ -175,11 +194,11 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#case_clause.
     def visitCase_clause(self, ctx: TyCParser.Case_clauseContext):
-        return self.visitChildren(ctx)
+        return CaseStmt(self.visit(ctx.case_expr()), self.visit(ctx.stmt_list()))
 
     # Visit a parse tree produced by TyCParser#default_clause.
     def visitDefault_clause(self, ctx: TyCParser.Default_clauseContext):
-        return self.visitChildren(ctx)
+        return DefaultStmt(self.visit(ctx.stmt_list()))
 
     # Visit a parse tree produced by TyCParser#case_expr.
     def visitCase_expr(self, ctx: TyCParser.Case_exprContext):
@@ -187,18 +206,34 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#case_add.
     def visitCase_add(self, ctx: TyCParser.Case_addContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.case_mul())
+        left = self.visit(ctx.case_add())
+        op = ctx.getChild(1).getText()
+        right = self.visit(ctx.case_mul())
+        return BinaryOp(left, op, right)
 
     # Visit a parse tree produced by TyCParser#case_mul.
     def visitCase_mul(self, ctx: TyCParser.Case_mulContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.case_unary())
+        left = self.visit(ctx.case_mul())
+        op = ctx.getChild(1).getText()
+        right = self.visit(ctx.case_unary())
+        return BinaryOp(left, op, right)
 
     # Visit a parse tree produced by TyCParser#case_unary.
     def visitCase_unary(self, ctx: TyCParser.Case_unaryContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return self.visit(ctx.case_primary())
+        op = ctx.getChild(0).getText()
+        right = self.visit(ctx.case_primary())
+        return PrefixOp(op, right)
 
     # Visit a parse tree produced by TyCParser#case_primary.
     def visitCase_primary(self, ctx: TyCParser.Case_primaryContext):
+        if ctx.INTLIT():
+            return IntLiteral(int(ctx.INTLIT().getText()))
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by TyCParser#break_stmt.
@@ -211,16 +246,17 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#return_stmt.
     def visitReturn_stmt(self, ctx: TyCParser.Return_stmtContext):
-        expr = self.visit(ctx.return_expr()) if ctx.return_expr() else None
-        return ReturnStmt(expr)
+        return ReturnStmt(self.visit(ctx.return_expr()))
 
     # Visit a parse tree produced by TyCParser#return_expr.
     def visitReturn_expr(self, ctx: TyCParser.Return_exprContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return None
+        return self.visit(ctx.expr())
 
     # Visit a parse tree produced by TyCParser#expr_stmt.
     def visitExpr_stmt(self, ctx: TyCParser.Expr_stmtContext):
-        return self.visit(ctx.expr())
+        return ExprStmt(self.visit(ctx.expr()))
 
     # Visit a parse tree produced by TyCParser#expr.
     def visitExpr(self, ctx: TyCParser.ExprContext):
@@ -236,7 +272,9 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#lhs.
     def visitLhs(self, ctx: TyCParser.LhsContext):
-        return Identifier(ctx.ID().getText())
+        if ctx.getChildCount() == 1:
+            return Identifier(ctx.ID().getText())
+        return MemberAccess(self.visit(ctx.lhs()), ctx.ID().getText())
 
     # Visit a parse tree produced by TyCParser#logic_or_expr.
     def visitLogic_or_expr(self, ctx: TyCParser.Logic_or_exprContext):
@@ -348,7 +386,7 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#struct_literal.
     def visitStruct_literal(self, ctx: TyCParser.Struct_literalContext):
-        return self.visit(ctx.argument_list())
+        return StructLiteral(self.visit(ctx.argument_list()))
 
     # Visit a parse tree produced by TyCParser#argument_list.
     def visitArgument_list(self, ctx: TyCParser.Argument_listContext):

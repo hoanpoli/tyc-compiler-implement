@@ -25,7 +25,7 @@ def test3_ast_gen_placeholder():
     source = """void main() {
     foo(a, b, c);
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([FuncCall(Identifier(foo), [Identifier(a), Identifier(b), Identifier(c)])]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ExprStmt(FuncCall(Identifier(foo), [Identifier(a), Identifier(b), Identifier(c)]))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 def test4_if_no_else():
@@ -35,7 +35,7 @@ void main() {
         b = 1;
     }
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([IfStmt(if Identifier(a) then BlockStmt([AssignExpr(Identifier(b) = IntLiteral(1))]))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([IfStmt(if Identifier(a) then BlockStmt([ExprStmt(AssignExpr(Identifier(b) = IntLiteral(1)))]))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
@@ -47,7 +47,7 @@ void main() {
     else 
         b = 2;
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([IfStmt(if Identifier(a) then AssignExpr(Identifier(b) = IntLiteral(1)), else AssignExpr(Identifier(b) = IntLiteral(2)))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([IfStmt(if Identifier(a) then ExprStmt(AssignExpr(Identifier(b) = IntLiteral(1))), else ExprStmt(AssignExpr(Identifier(b) = IntLiteral(2))))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
@@ -58,7 +58,7 @@ void main() {
         i = i + 1;
     }
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([WhileStmt(while BinaryOp(Identifier(i), <, IntLiteral(10)) do BlockStmt([AssignExpr(Identifier(i) = BinaryOp(Identifier(i), +, IntLiteral(1)))]))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([WhileStmt(while BinaryOp(Identifier(i), <, IntLiteral(10)) do BlockStmt([ExprStmt(AssignExpr(Identifier(i) = BinaryOp(Identifier(i), +, IntLiteral(1))))]))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
@@ -69,7 +69,7 @@ void main() {
         printInt(i);
     }
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ForStmt(for VarDecl(IntType(), i = IntLiteral(0)); BinaryOp(Identifier(i), <, IntLiteral(10)); AssignExpr(Identifier(i) = BinaryOp(Identifier(i), +, IntLiteral(1)) do BlockStmt([FuncCall(Identifier(printInt), [Identifier(i)])]))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ForStmt(for VarDecl(IntType(), i = IntLiteral(0)); BinaryOp(Identifier(i), <, IntLiteral(10)); AssignExpr(Identifier(i) = BinaryOp(Identifier(i), +, IntLiteral(1))) do BlockStmt([ExprStmt(FuncCall(Identifier(printInt), [Identifier(i)]))]))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
@@ -80,7 +80,7 @@ void main() {
         i = i + 2;
     }
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ForStmt(for None; BinaryOp(Identifier(i), <, IntLiteral(10)); PostfixOp(Identifier(i)++) do BlockStmt([AssignExpr(Identifier(i) = BinaryOp(Identifier(i), +, IntLiteral(2)))]))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ForStmt(for None; BinaryOp(Identifier(i), <, IntLiteral(10)); PostfixOp(Identifier(i)++) do BlockStmt([ExprStmt(AssignExpr(Identifier(i) = BinaryOp(Identifier(i), +, IntLiteral(2))))]))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
@@ -102,7 +102,7 @@ void main() {
         continue;
     }
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ForStmt(for VarDecl(IntType(), i = IntLiteral(0)); BinaryOp(Identifier(i), <, IntLiteral(10)); PostfixOp(Identifier(i), ++) do BlockStmt([ContinueStmt()]))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([ForStmt(for VarDecl(IntType(), i = IntLiteral(0)); BinaryOp(Identifier(i), <, IntLiteral(10)); PostfixOp(Identifier(i)++) do BlockStmt([ContinueStmt()]))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
@@ -135,7 +135,7 @@ void main() {
         else
             c = 2;
 }"""
-    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([IfStmt(if Identifier(a) then IfStmt(if Identifier(b) then AssignExpr(Identifier(c) = IntLiteral(1)), else AssignExpr(Identifier(c) = IntLiteral(2))))]))])"
+    expected = "Program([FuncDecl(VoidType(), main, [], BlockStmt([IfStmt(if Identifier(a) then IfStmt(if Identifier(b) then ExprStmt(AssignExpr(Identifier(c) = IntLiteral(1))), else ExprStmt(AssignExpr(Identifier(c) = IntLiteral(2)))))]))])"
     assert str(ASTGenerator(source).generate()) == expected
 
 
