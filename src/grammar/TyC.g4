@@ -31,15 +31,15 @@ decl: struct_decl | func_decl;
 
 func_decl: func_return ID LP param_list RP block_stmt;
 func_return: return_type | ;
-return_type: type | VOID;
+return_type: type | VOID | AUTO;
 param_list: param_prime | ;
-param_prime: param_decl COMMA param_list | param_decl;
+param_prime: param_decl COMMA param_prime | param_decl;
 param_decl: type ID;
 stmt_list: stmt stmt_list | ;
 
 struct_decl: STRUCT ID LB struct_body_list RB SEMI_COLON;
 struct_body_list: struct_member_list | ;
-struct_member_list: struct_body struct_body_list | struct_body;
+struct_member_list: struct_body struct_member_list | struct_body;
 struct_body: type ID SEMI_COLON;
 
 stmt: var_decl_stmt | block_stmt | if_stmt | while_stmt | for_stmt | switch_stmt | break_stmt | continue_stmt | return_stmt | expr_stmt;

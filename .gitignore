@@ -25,3 +25,4 @@ env/
 reports/
 *.class
 *.j
+/src/grammar/.antlr

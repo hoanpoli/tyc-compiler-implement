@@ -19,30 +19,38 @@ class ASTGeneration(TyCVisitor):
         return [self.visit(ctx.decl())] + self.visit(ctx.decl_list())
 
     def visitFunc_decl(self, ctx: TyCParser.Func_declContext):
-        return_type = self.visit(ctx.func_return())
+        func_return = self.visit(ctx.func_return())
         name = ctx.ID().getText()
         params = self.visit(ctx.param_list()) if ctx.param_list() else []
         body = self.visit(ctx.block_stmt()) if ctx.block_stmt() else []
-        return FuncDecl(return_type, name, params, body)
+        return FuncDecl(func_return, name, params, body)
 
     def visitFunc_return(self, ctx: TyCParser.Func_returnContext):
+        if ctx.getChildCount() == 0:
+            return None
         return self.visit(ctx.return_type())
 
     def visitReturn_type(self, ctx: TyCParser.Return_typeContext):
         if ctx.VOID():
             return VoidType()
-        return self.visit(ctx.type_())
+        if ctx.AUTO():
+            return ctx.AUTO().getText()
+        return self.visit(ctx.type_()) if ctx.type_() else None
 
     def visitParam_list(self, ctx: TyCParser.Param_listContext):
+        if ctx.getChildCount() == 0:
+            return []
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by TyCParser#param_prime.
     def visitParam_prime(self, ctx: TyCParser.Param_primeContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return [self.visit(ctx.param_decl())]
+        return [self.visit(ctx.param_decl())] + self.visit(ctx.param_prime())
 
     # Visit a parse tree produced by TyCParser#param_decl.
     def visitParam_decl(self, ctx: TyCParser.Param_declContext):
-        return self.visitChildren(ctx)
+        return Param(self.visit(ctx.type_()), ctx.ID().getText())
 
     # Visit a parse tree produced by TyCParser#stmt_list.
     def visitStmt_list(self, ctx: TyCParser.Stmt_listContext):
@@ -52,19 +60,23 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#struct_decl.
     def visitStruct_decl(self, ctx: TyCParser.Struct_declContext):
-        return self.visitChildren(ctx)
+        return StructDecl(ctx.ID().getText(), self.visit(ctx.struct_body_list()))
 
     # Visit a parse tree produced by TyCParser#struct_body_list.
     def visitStruct_body_list(self, ctx: TyCParser.Struct_body_listContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return []
+        return self.visit(ctx.struct_member_list())
 
     # Visit a parse tree produced by TyCParser#struct_member_list.
     def visitStruct_member_list(self, ctx: TyCParser.Struct_member_listContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 1:
+            return [self.visit(ctx.struct_body())]
+        return [self.visit(ctx.struct_body())] + self.visit(ctx.struct_member_list())
 
     # Visit a parse tree produced by TyCParser#struct_body.
     def visitStruct_body(self, ctx: TyCParser.Struct_bodyContext):
-        return self.visitChildren(ctx)
+        return MemberDecl(self.visit(ctx.type_()), ctx.ID().getText())
 
     # Visit a parse tree produced by TyCParser#stmt.
     def visitStmt(self, ctx: TyCParser.StmtContext):
@@ -76,7 +88,9 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#var_init.
     def visitVar_init(self, ctx: TyCParser.Var_initContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return None
+        return self.visit(ctx.expr())
 
     # Visit a parse tree produced by TyCParser#block_stmt.
     def visitBlock_stmt(self, ctx):
@@ -84,7 +98,9 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#decl_type.
     def visitDecl_type(self, ctx: TyCParser.Decl_typeContext):
-        return self.visitChildren(ctx)
+        if ctx.AUTO():
+            return ctx.AUTO().getText()
+        return self.visit(ctx.type_())
 
     # Visit a parse tree produced by TyCParser#type.
     def visitType(self, ctx: TyCParser.TypeContext):
