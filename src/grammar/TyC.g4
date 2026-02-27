@@ -58,7 +58,7 @@ else_part: ELSE stmt | ;
 
 while_stmt: WHILE LP expr RP stmt;
 for_stmt: FOR LP for_init SEMI_COLON for_cond SEMI_COLON for_update RP stmt;
-for_init: for_var_decl | expr | ;
+for_init: for_var_decl | assign_expr | ;
 for_var_decl: decl_type ID | decl_type ID ASSIGN expr;
 
 for_cond: expr | ;

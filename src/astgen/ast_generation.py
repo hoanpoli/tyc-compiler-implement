@@ -117,35 +117,45 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#if_stmt.
     def visitIf_stmt(self, ctx: TyCParser.If_stmtContext):
-        return self.visitChildren(ctx)
+        return IfStmt(self.visit(ctx.expr()), self.visit(ctx.stmt()), self.visit(ctx.else_part()))
 
     # Visit a parse tree produced by TyCParser#else_part.
     def visitElse_part(self, ctx: TyCParser.Else_partContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return None
+        return self.visit(ctx.stmt())
 
     # Visit a parse tree produced by TyCParser#while_stmt.
     def visitWhile_stmt(self, ctx: TyCParser.While_stmtContext):
-        return self.visitChildren(ctx)
+        return WhileStmt(self.visit(ctx.expr()), self.visit(ctx.stmt()))
 
     # Visit a parse tree produced by TyCParser#for_stmt.
     def visitFor_stmt(self, ctx: TyCParser.For_stmtContext):
-        return self.visitChildren(ctx)
+        return ForStmt(self.visit(ctx.for_init()), self.visit(ctx.for_cond()), self.visit(ctx.for_update()), self.visit(ctx.stmt()))
 
     # Visit a parse tree produced by TyCParser#for_init.
     def visitFor_init(self, ctx: TyCParser.For_initContext):
+        if ctx.getChildCount() == 0:
+            return None
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by TyCParser#for_var_decl.
     def visitFor_var_decl(self, ctx: TyCParser.For_var_declContext):
-        return self.visitChildren(ctx)
+        if ctx.ASSIGN():
+            return VarDecl(self.visit(ctx.decl_type()), ctx.ID().getText(), self.visit(ctx.expr()))
+        return VarDecl(self.visit(ctx.decl_type()), ctx.ID().getText())
 
     # Visit a parse tree produced by TyCParser#for_cond.
     def visitFor_cond(self, ctx: TyCParser.For_condContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return None
+        return self.visit(ctx.expr())
 
     # Visit a parse tree produced by TyCParser#for_update.
     def visitFor_update(self, ctx: TyCParser.For_updateContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 0:
+            return None
+        return self.visit(ctx.expr())
 
     # Visit a parse tree produced by TyCParser#switch_stmt.
     def visitSwitch_stmt(self, ctx: TyCParser.Switch_stmtContext):
@@ -193,11 +203,11 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#break_stmt.
     def visitBreak_stmt(self, ctx: TyCParser.Break_stmtContext):
-        return self.visitChildren(ctx)
+        return BreakStmt()
 
     # Visit a parse tree produced by TyCParser#continue_stmt.
     def visitContinue_stmt(self, ctx: TyCParser.Continue_stmtContext):
-        return self.visitChildren(ctx)
+        return ContinueStmt()
 
     # Visit a parse tree produced by TyCParser#return_stmt.
     def visitReturn_stmt(self, ctx: TyCParser.Return_stmtContext):
