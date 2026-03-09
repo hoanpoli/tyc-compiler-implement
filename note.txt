@@ -141,3 +141,84 @@ LB: '{';
 - Sinh cây cú pháp trừu tượng (10 câu)
 	+ Ôn kỹ các cấu trúc rẽ nhánh, cấu trúc lặp
 	
+	
+W5: Naming, scoping and referencing environment
+- Tham chiếu treo: -> tham chiêu tới một đối tượng k tồn tại.
+	p = new int;
+	q = p;
+	delete p;
+	*q;
+	
+- Leak memory - garbage
+	p = new int
+	p = null;
+	--> k còn p, nhưng đối tượng new int vẫn còn -> gây ra rác
+	
+	
+
+- Static: vùng nhớ tĩnh: được tính toán lúc dịch: kéo dài trong suốt thời gian chương trình chạy  tới khi kết thúc
+	+ Cấp phát cho biến toàn cục
+	+ Hằng
+- Stack Dynamic
+	+ Cấp phát cho đối tượng theo quy luật cấp trước, huỷ bỏ sau
+		Vd: Biến cục bộ
+- Heap: cấp phát cho đối tượng k theo quy luật		
+	- Explicit Heap Dynamic: 
+		Lệnh cụ thể
+	- Implicit Heap Dynamic: 
+	
+	vd: malloc()
+	
+	
+- Block
+- Tầm vực: là hiệu lực của 1 khai báo
+	+ Tĩnh: hiệu lực của khai báo được xác định trong thời gian dịch
+	+ Động: quyết định vào thời gian thực thi
+	
+1 số cái rules cho block:
+	- 1 cái tham khảo tới 1 danh hiệu luôn luôn bound tới cái khai bao local nhất
+		ví dụ các khai báo biến trong các block lồng nhau, thì khi dùng cái biến đó sẽ dùng block bên trong cùng nhất
+	- 1 khai báo chỉ đc thấy bên trong block
+	- 1 khhai báo ở bên ngoài thì block bên trong có thể nhìn thấy, trừ khi bên trong khai báo lại biến đó
+	- 1 block đc đặt tên thì cái tên của block sẽ thuộc về local của block bên ngoài, chứ không thuộc về block hiện tại
+	
+	Ví dụ: Tầm vực tĩnh
+	
+	var A, B, C: real //1
+	procedure Sub1 (A: real); //2
+		var D: real
+		procedure Sub2 (C: real);
+			var D: real;
+			begin
+				...C:= C+B;..
+			end;
+		begin
+			...Sub2(B);...
+		end;
+	begin //Main
+		...Sub1(A);...
+	end.
+	
+	Ta hệ thống như sau:
+	
+	Varibale   	Scope
+	A:real //1 	chỉ có hiệu lực trong chương trình Main, vì Sub1 khai báo lại Action
+	B:real //1 	Main, Sub1, Sub2
+	C:real //1  Main, Sub1
+	A:real //2  Sub1, Sub2
+	C:real //2	Sub2
+	
+	
+	Ví dụ tầm vực động: không thể nhìn vào code mà biết
+	
+- Môi trường tham khảo: là khái niệm ngược của tầm vực
+	- trong tầm vực tĩnh: mttk là những biến local và nhưng cái tên
+	- trong tầm vực động: 
+	
+	Ví dụ đoạn code trong tầm vực tĩnh ở trên
+	
+	Hàm    Môi trường tham khảo
+	Main   A, B, C, Sub1
+	Sub1   A//2, D//1, Sub2 - cục bộ,  B//1, C//1, Sub1 (k cục bộ)
+	Sub2   C//2, D//2 - local, Sub2, A, Sub1, B
+	
