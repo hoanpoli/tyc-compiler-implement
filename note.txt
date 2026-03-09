@@ -73,3 +73,71 @@ CM: ',';
 SEMI: ';';
 LP: '(;
 LB: '{';
+
+
+Ôn thi giữa kỳ
+- Chương 1 giới thiệu ( 3 câu)
+	+ Phân biệt nhiệm vụ của 5 giải đoạn trong sơ đồ
+		cho 1 nvu, giai đoạn nào sau đây là cái : Bước 1 phân tích từ vựng, .....
+	+ Phân biệt 5 cái loại: trình dịch, biên dịch, thông dịch, lai, và just-in-time compiler (loại này chỉ chuyển 1 phần mã nguồn , k phải toàn bộ)
+	+ Phân biệt Linker, Compllier, ... ví dụ chương trình nào chịu trách nhiệm ... thành 1 file duy nhất
+	
+- Chương Phân tích từ vựng: 6-8 câu
+	+ Biết về biểu thức chính quy: Đọc, viết, rút gọn, tìm biểu thức chính quy tương đương, 
+	+ Dấu *, dấu +, ví dụ: cho ngôn ngữ L = {xy, xx,y}, chuỗi nào sau đây k thuộc L*: xyxy, xxyx, yxyy, xxyxy . -> xxyx
+	+ Tập trung vào biểu thức chính quy NRTLR:
+		- Lưu ý ảnh hưởng thứ tự viết lên token đc nhận dạng, ví dụ các từ khoá cần được viết phía trên ID
+		- Phải xác định đc số token , lexem thứ 19 là gì
+		- Action block: self.text, self.type
+		- có 1 câu: cho 1 đoạn code, tìm biểu thức chính quy nào tương đương đoạn code
+		Ví dụ: 
+			def validate(x):
+				if len(x) = 0 return false
+				for c in x
+					if not(x<= '9' and c>='0') return false
+				return true
+				
+				0-9 *
+				0-9 +  -> đáp án
+				[0-9][0-9]+
+				0-9 ?
+				
+- Phân tích ngữ pháp
+	- Đọc viết văn phạm
+	- Văn phạm bị nhập nhằng ( có 1 câu) - bị tạo ra 2 cây phân tích cú pháp
+	- Tính giá trị của 1 biểu thức dựa trên văn phạm
+	- Từ độ ưu tiên và tính kết -> hợp vẽ cây phân tính cú pháp
+	- Xác định chuỗi nhập có thuộc văn phạm k?
+		
+- Lập trình hướng đối tượng
+	+ Chú ý tới tính đa hình: 
+		-đa hình tại biên dịch (compine time - xác định luôn ), overload , cùng tên khác tham số ( số lượng hoặc kiểu)
+		-tại thời điểm chạy: kế thừa và overide, 
+			vd: lst - [A(), B(), C()]
+				for i in lst
+					i.same()
+	
+	+ MRO trong python
+		Ôn thuật toán thứ tự phân giải đa thừa kế -> thứ tự gọi các lớp overide
+		Ôn kỹ thứ tự chạy super()
+		
+	+ Visitor token
+		+ vai trò hàm visit và accept
+		
+	+ decorator: làm thay đổi hoặc mở rộng hoặc hành vi của hàm khác
+		- Có tham số
+		- Không có tham số
+		
+- Lập trình hàm
+	+ High-order function: 1 hàm nhận hàm khác làm tham số và trả về 1 hàm
+	+ Phân biệt với cái loại nhận vào 1 hàm nhưng k trả về hàm khác làm tham sô , ví dụ 
+		def foo(x)
+			def bar(x)	return x+1
+		return bar(x)
+	+ hàm reduce, map, filter, 
+	+ Closer
+	+ Hằng (function composition)
+	
+- Sinh cây cú pháp trừu tượng (10 câu)
+	+ Ôn kỹ các cấu trúc rẽ nhánh, cấu trúc lặp
+	
