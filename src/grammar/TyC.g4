@@ -132,17 +132,19 @@ postfix_expr: primary_expr
             | postfix_expr postfix_suffix;
 
 postfix_suffix
-    : LP argument_list RP
-    | DOT ID
+    : DOT ID
     | INC
     | DEC;
 
-primary_expr: ID
+primary_expr: func_call
+            | ID
             | INTLIT
             | FLOATLIT
             | STRINGLIT
             | LP expr RP
             | struct_literal;
+
+func_call: ID LP argument_list RP;
 
 struct_literal: LB argument_list RB;
 

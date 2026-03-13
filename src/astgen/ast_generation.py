@@ -22,7 +22,7 @@ class ASTGeneration(TyCVisitor):
         func_return = self.visit(ctx.func_return())
         name = ctx.ID().getText()
         params = self.visit(ctx.param_list()) if ctx.param_list() else []
-        body = self.visit(ctx.block_stmt()) if ctx.block_stmt() else []
+        body = self.visit(ctx.block_stmt())
         return FuncDecl(func_return, name, params, body)
 
     def visitFunc_return(self, ctx: TyCParser.Func_returnContext):
@@ -56,7 +56,21 @@ class ASTGeneration(TyCVisitor):
     def visitStmt_list(self, ctx: TyCParser.Stmt_listContext):
         if ctx.getChildCount() == 0:
             return []
-        return [self.visit(ctx.stmt())] + self.visit(ctx.stmt_list())
+        
+        # Flatten logic for statement lists
+        def flatten(lst):
+            result = []
+            for item in lst:
+                if isinstance(item, list):
+                    result.extend(flatten(item))
+                else:
+                    result.append(item)
+            return result
+        
+        stmt = self.visit(ctx.stmt())
+        stmts = flatten([stmt]) if isinstance(stmt, list) else [stmt]
+        rest = flatten(self.visit(ctx.stmt_list()))
+        return stmts + rest
 
     # Visit a parse tree produced by TyCParser#struct_decl.
     def visitStruct_decl(self, ctx: TyCParser.Struct_declContext):
@@ -94,7 +108,20 @@ class ASTGeneration(TyCVisitor):
 
     # Visit a parse tree produced by TyCParser#block_stmt.
     def visitBlock_stmt(self, ctx):
-        return BlockStmt(self.visit(ctx.stmt_list()))
+        if ctx.stmt_list():
+            stmts = self.visit(ctx.stmt_list())
+            
+            def flatten(lst):
+                result = []
+                for item in lst:
+                    if isinstance(item, list):
+                        result.extend(flatten(item))
+                    elif item:
+                        result.append(item)
+                return result
+                
+            return BlockStmt(flatten(stmts) if isinstance(stmts, list) else flatten([stmts]))
+        return BlockStmt([])
 
     # Visit a parse tree produced by TyCParser#decl_type.
     def visitDecl_type(self, ctx: TyCParser.Decl_typeContext):
@@ -349,9 +376,6 @@ class ASTGeneration(TyCVisitor):
         if ctx.DOT():
             return ("field", ctx.ID().getText())
 
-        if ctx.LP():
-            return ("call", self.visit(ctx.argument_list()))
-
         if ctx.INC():
             return ("postfix", ctx.INC().getText())
 
@@ -367,11 +391,10 @@ class ASTGeneration(TyCVisitor):
         if kind == "postfix":
             return PostfixOp(value, left)
 
-        if kind == "call":
-            return FuncCall(left, value)
-
     # Visit a parse tree produced by TyCParser#primary_expr.
     def visitPrimary_expr(self, ctx: TyCParser.Primary_exprContext):
+        if ctx.func_call():
+            return self.visit(ctx.func_call())
         if ctx.ID():
             return Identifier(ctx.ID().getText())
         if ctx.INTLIT():
@@ -383,6 +406,10 @@ class ASTGeneration(TyCVisitor):
         if ctx.expr():
             return self.visit(ctx.expr())
         return self.visitChildren(ctx)
+
+    # Visit a parse tree produced by TyCParser#func_call.
+    def visitFunc_call(self, ctx: TyCParser.Func_callContext):
+        return FuncCall(ctx.ID().getText(), self.visit(ctx.argument_list()))
 
     # Visit a parse tree produced by TyCParser#struct_literal.
     def visitStruct_literal(self, ctx: TyCParser.Struct_literalContext):
