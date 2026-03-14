@@ -97,8 +97,7 @@ return_expr: expr | ;
 expr_stmt: expr SEMI_COLON;
 
 expr: assign_expr;
-assign_expr: lhs ASSIGN assign_expr | logic_or_expr;
-lhs: ID | lhs DOT ID;
+assign_expr: postfix_expr ASSIGN assign_expr | logic_or_expr;
 logic_or_expr: logic_or_expr OR logic_and_expr | logic_and_expr;
 logic_and_expr: logic_and_expr AND equality_expr | equality_expr;
 equality_expr: equality_expr EQUAL relational_expr
@@ -206,7 +205,7 @@ INTLIT: [0-9]+;
 FLOATLIT: ( [0-9]+ '.' [0-9]* ([eE] [+-]? [0-9]+)? | '.' [0-9]+ ([eE] [+-]? [0-9]+)? | [0-9]+ [eE] [+-]? [0-9]+ ) ;
 
 ILLEGAL_ESCAPE: '"' ( ESC_SEQ | ~["\\\r\n] )* '\\' ~[bfrnt"\\\r\n] { self.text = self.text[1:]; };
-UNCLOSE_STRING: '"' (ESC_SEQ | ~["\\\r\n])* { self.text = self.text[1:] };
+UNCLOSE_STRING: '"' (ESC_SEQ | ~["\\\r\n])* '\\'? { self.text = self.text[1:] };
 STRINGLIT : '"' ( ESC_SEQ | ~["\\\r\n] )* '"' { self.text = self.text[1:-1]; };
 
 fragment ESC_SEQ: '\\' [bfrnt"\\];

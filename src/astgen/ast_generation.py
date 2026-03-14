@@ -126,7 +126,7 @@ class ASTGeneration(TyCVisitor):
     # Visit a parse tree produced by TyCParser#decl_type.
     def visitDecl_type(self, ctx: TyCParser.Decl_typeContext):
         if ctx.AUTO():
-            return ctx.AUTO().getText()
+            return None
         return self.visit(ctx.type_())
 
     # Visit a parse tree produced by TyCParser#type.
@@ -293,15 +293,9 @@ class ASTGeneration(TyCVisitor):
     def visitAssign_expr(self, ctx: TyCParser.Assign_exprContext):
         if ctx.getChildCount() == 1:
             return self.visit(ctx.logic_or_expr())
-        left = self.visit(ctx.lhs())
+        left = self.visit(ctx.postfix_expr())
         right = self.visit(ctx.assign_expr())
         return AssignExpr(left, right)
-
-    # Visit a parse tree produced by TyCParser#lhs.
-    def visitLhs(self, ctx: TyCParser.LhsContext):
-        if ctx.getChildCount() == 1:
-            return Identifier(ctx.ID().getText())
-        return MemberAccess(self.visit(ctx.lhs()), ctx.ID().getText())
 
     # Visit a parse tree produced by TyCParser#logic_or_expr.
     def visitLogic_or_expr(self, ctx: TyCParser.Logic_or_exprContext):
