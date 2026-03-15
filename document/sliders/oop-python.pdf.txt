@@ -1,0 +1,1321 @@
+Page 1:
+Case Study: Python
+Object Oriented Programming
+Dr. Nguyen Hua Phung
+HCMC University of Technology, Viet Nam
+08, 2020
+Dr. Nguyen Hua Phung Case Study: Python 1 / 1
+Page 2:
+Class
+Class vs. Object
+Instance vs. static ﬁelds
+Instance, Class, Static methods
+Encapsulation
+Inheritance
+Polymorphism
+Dr. Nguyen Hua Phung Case Study: Python 2 / 1
+Page 3:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >:
+’ Optional class documentation s t r i n g ’
+< class_suite >
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0
+def _ _ i n i t _ _ ( s e l f , n , s ) :
+s e l f . name = n
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 4:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite >
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0
+def _ _ i n i t _ _ ( s e l f , n , s ) :
+s e l f . name = n
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 5:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0
+def _ _ i n i t _ _ ( s e l f , n , s ) :
+s e l f . name = n
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 6:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0
+def _ _ i n i t _ _ ( s e l f , n , s ) :
+s e l f . name = n
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 7:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0 => empCount: static ﬁeld
+def _ _ i n i t _ _ ( s e l f , n , s ) :
+s e l f . name = n
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 8:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0 => empCount: static ﬁeld
+def _ _ i n i t _ _ ( s e l f , n , s ) : =>constructor
+s e l f . name = n
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 9:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0 => empCount: static ﬁeld
+def _ _ i n i t _ _ ( s e l f , n , s ) : =>constructor
+s e l f . name = n =>name: instance ﬁeld
+s e l f . s a l a r y = s
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 10:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0 => empCount: static ﬁeld
+def _ _ i n i t _ _ ( s e l f , n , s ) : =>constructor
+s e l f . name = n =>name: instance ﬁeld
+s e l f . s a l a r y = s =>salary: instance ﬁeld
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30)
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 11:
+Class vs. Object
+Class is a user-deﬁned prototype for an object
+class <Clsname >: => Clsname: name of the class
+’ Optional class documentation s t r i n g ’
+< class_suite > => ﬁelds, methods
+Object: an instance of the class
+class Employee :
+’Common base class f o r a l l employees ’
+empCount = 0 => empCount: static ﬁeld
+def _ _ i n i t _ _ ( s e l f , n , s ) : =>constructor
+s e l f . name = n =>name: instance ﬁeld
+s e l f . s a l a r y = s =>salary: instance ﬁeld
+Employee . empCount += 1
+obj = Employee ( "Nam" ,30) => create object
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 12:
+Instance Methods
+Instance Method: method belongs to the instance
+class Employee :
+def displayEmployee ( s e l f ) :
+p r i n t( "Name : " , s e l f . name,
+" , Salary : " , s e l f . s a l a r y )
+obj = Employee ( "Nam" ,30)
+obj . displayEmployee ( )
+able to access to instance ﬁelds through ﬁrst
+parameter and ’.’ => self.name
+able to access to static ﬁeld through class name and
+’.’ => Employee.empCount
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 13:
+Instance Methods
+Instance Method: method belongs to the instance
+class Employee :
+def displayEmployee ( s e l f ) : => ﬁrst param-
+eter for instance
+p r i n t( "Name : " , s e l f . name,
+" , Salary : " , s e l f . s a l a r y )
+obj = Employee ( "Nam" ,30)
+obj . displayEmployee ( )
+able to access to instance ﬁelds through ﬁrst
+parameter and ’.’ => self.name
+able to access to static ﬁeld through class name and
+’.’ => Employee.empCount
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 14:
+Instance Methods
+Instance Method: method belongs to the instance
+class Employee :
+def displayEmployee ( s e l f ) : => ﬁrst param-
+eter for instance
+p r i n t( "Name : " , s e l f . name,
+" , Salary : " , s e l f . s a l a r y )
+obj = Employee ( "Nam" ,30)
+obj . displayEmployee ( ) =>obj is passed to self
+able to access to instance ﬁelds through ﬁrst
+parameter and ’.’ => self.name
+able to access to static ﬁeld through class name and
+’.’ => Employee.empCount
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 15:
+Instance Methods
+Instance Method: method belongs to the instance
+class Employee :
+def displayEmployee ( s e l f ) : => ﬁrst param-
+eter for instance
+p r i n t( "Name : " , s e l f . name,
+" , Salary : " , s e l f . s a l a r y )
+obj = Employee ( "Nam" ,30)
+obj . displayEmployee ( ) =>obj is passed to self
+able to access to instance ﬁelds through ﬁrst
+parameter and ’.’ => self.name
+able to access to static ﬁeld through class name and
+’.’ => Employee.empCount
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 16:
+Instance Methods
+Instance Method: method belongs to the instance
+class Employee :
+def displayEmployee ( s e l f ) : => ﬁrst param-
+eter for instance
+p r i n t( "Name : " , s e l f . name,
+" , Salary : " , s e l f . s a l a r y )
+obj = Employee ( "Nam" ,30)
+obj . displayEmployee ( ) =>obj is passed to self
+able to access to instance ﬁelds through ﬁrst
+parameter and ’.’ => self.name
+able to access to static ﬁeld through class name and
+’.’ => Employee.empCount
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 17:
+Class and Static Methods
+class Employee :
+@classmethod
+def create ( cls , n , s ) :
+p r i n t( c l s . empCount )
+r e t u r n c l s ( n , s )
+@staticmethod
+def isHighSal ( s ) :
+i f s > 8:
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 18:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) :
+p r i n t( c l s . empCount )
+r e t u r n c l s ( n , s )
+@staticmethod
+def isHighSal ( s ) :
+i f s > 8:
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 19:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount )
+r e t u r n c l s ( n , s )
+@staticmethod
+def isHighSal ( s ) :
+i f s > 8:
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 20:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount ) =>access to static ﬁelds
+r e t u r n c l s ( n , s )
+@staticmethod
+def isHighSal ( s ) :
+i f s > 8:
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 21:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount ) =>access to static ﬁelds
+r e t u r n c l s ( n , s )
+@staticmethod =>to deﬁne static method
+def isHighSal ( s ) :
+i f s > 8:
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 22:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount ) =>access to static ﬁelds
+r e t u r n c l s ( n , s )
+@staticmethod =>to deﬁne static method
+def isHighSal ( s ) : =>no parameter for class
+i f s > 8:
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 23:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount ) =>access to static ﬁelds
+r e t u r n c l s ( n , s )
+@staticmethod =>to deﬁne static method
+def isHighSal ( s ) : =>no parameter for class
+i f s > 8: =>unable to access any ﬁelds
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30)
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 24:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount ) =>access to static ﬁelds
+r e t u r n c l s ( n , s )
+@staticmethod =>to deﬁne static method
+def isHighSal ( s ) : =>no parameter for class
+i f s > 8: =>unable to access any ﬁelds
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30) =>Employee is
+passed to cls
+Employee . isHighSal (30)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 25:
+Class and Static Methods
+class Employee :
+@classmethod =>to deﬁne class method
+def create ( cls , n , s ) : =>ﬁrst parameter for class
+p r i n t( c l s . empCount ) =>access to static ﬁelds
+r e t u r n c l s ( n , s )
+@staticmethod =>to deﬁne static method
+def isHighSal ( s ) : =>no parameter for class
+i f s > 8: =>unable to access any ﬁelds
+p r i n t( " High Salary " )
+obj = Employee . create ( "Nam" ,30) =>Employee is
+passed to cls
+Employee . isHighSal (30) =>Employee is used to re-
+solve
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 26:
+Encapsulation
+to hide ﬁelds and methods
+based on name of ﬁelds and methods
+Protected: preﬁx by a single underscore (_example)
+Private: preﬁx by a double underscores (__example)
+Public: begin with a letter
+Dr. Nguyen Hua Phung Case Study: Python 6 / 1
+Page 27:
+Class Hierarchy
+Python 3: root is object
+Multiple Inheritance
+class <clsname >(< parent >( , < parent > ) ∗ ) ? :
+For example,
+class A: => superclass is object
+class Rectangle ( Parallelogram ) :
+class Square (Rhombus , Rectangle ) :
+Dr. Nguyen Hua Phung Case Study: Python 7 / 1
+Page 28:
+Class Hierarchy
+Python 3: root is object
+Multiple Inheritance
+class <clsname >(< parent >( , < parent > ) ∗ ) ? :
+For example,
+class A: => superclass is object
+class Rectangle ( Parallelogram ) :
+=> superclass is Parallelogram
+class Square (Rhombus , Rectangle ) :
+Dr. Nguyen Hua Phung Case Study: Python 7 / 1
+Page 29:
+Class Hierarchy
+Python 3: root is object
+Multiple Inheritance
+class <clsname >(< parent >( , < parent > ) ∗ ) ? :
+For example,
+class A: => superclass is object
+class Rectangle ( Parallelogram ) :
+=> superclass is Parallelogram
+class Square (Rhombus , Rectangle ) :
+=> superclasses are Rhombus and Rectangle
+Dr. Nguyen Hua Phung Case Study: Python 7 / 1
+Page 30:
+Inheritance
+Subclass inherits non-private ﬁelds and methods
+from super-classes
+Diamond problem
+A
+B
+D
+C
+Method Resolution Order: determine search
+sequence of a class
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 31:
+Method Resolution Order (MRO)
+MRO is used to determine search sequence L(M) of
+class M
+L(object) = [object]
+L(M(A,B,C)) = [M] + merge(L(A),L(B),L(C),[A,B,C])
+merge([H1|T1],[H2|T2],[H3|T3])
+Step 1: if H1 is a good head which is NOT in the tail
+of other lists, take H1 out as an output, remove H1 out
+of all lists, back to Step 1.
+Step 2: if H1 is not a good head, check if H2 is a good
+head. If it is, apply Step1 for H2. If it is not, check for
+H3 and so on. If there is no good head, give an error.
+Dr. Nguyen Hua Phung Case Study: Python 9 / 1
+Page 32:
+Method Resolution Order (MRO)
+MRO is used to determine search sequence L(M) of
+class M
+L(object) = [object]
+L(M(A,B,C)) = [M] + merge(L(A),L(B),L(C),[A,B,C])
+merge([H1|T1],[H2|T2],[H3|T3])
+Step 1: if H1 is a good head which is NOT in the tail
+of other lists, take H1 out as an output, remove H1 out
+of all lists, back to Step 1.
+Step 2: if H1 is not a good head, check if H2 is a good
+head. If it is, apply Step1 for H2. If it is not, check for
+H3 and so on. If there is no good head, give an error.
+Dr. Nguyen Hua Phung Case Study: Python 9 / 1
+Page 33:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 34:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 35:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 36:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 37:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 38:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 39:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 40:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 41:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 42:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C])
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 43:
+Example
+A
+B(A)
+D(B,C)
+C(A)
+L(A) = [A,object]
+L(B) = [B] + merge(L(A),[A]) = [B,A,object]
+L(C) = [C] + merge(L(A),[A]) = [C,A,object]
+L(D) = [D]+merge(L(B),L(C),[B,C]) = [D,B,C,A,object]
+merge([B,A,o],[C,A,o],[B,C]) =>
+B is a good head => [B]+merge([A,o],[C,A,o],[C])
+A is NOT a good head, check C, and C is a good
+head => [B,C] + merge([A,o],[A,o],[])
+A is a good head => [B,C,A] + merge([o],[o],[])
+o is a good head => [B,C,A,o]
+Dr. Nguyen Hua Phung Case Study: Python 10 / 1
+Page 44:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 45:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 ) => 3
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 46:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 47:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+isinstance(x,B)
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 48:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+isinstance(x,B) => True
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 49:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+isinstance(x,A)
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 50:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+isinstance(x,A) => True
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 51:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 52:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(x) is B
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 53:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(x) is B => True
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 54:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(x) is A
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 55:
+super, isinstance, type
+super() => refer to the superclass
+1 class A:
+2 def foo ( s e l f , x ) :
+3 p r i n t( x )
+4 class B(A ) :
+5 def foo ( s e l f , x ) :
+6 super ( ) . foo ( x )
+7 B ( ) . foo ( 3 )
+isinstance(o,T) => check if object o is of type T
+class A: pass
+class B(A ) : pass
+x = B ( )
+type(x) is A => False
+type(o) => return the type of object o
+Dr. Nguyen Hua Phung Case Study: Python 11 / 1
+Page 56:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 57:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 58:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 59:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 60:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 61:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+def func2(self): pass
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+x.func2()
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 62:
+Polymorphism
+Overloading:
+def func ( param1 , param2 =0): pass
+func ( 1 , 2 )
+func ( " asbc " )
+Universal Polymorphism:
+Parametric Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+def func2(self): pass
+class B:
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+x.func2()
+Subtyping Polymorphism
+class A:
+def func1 ( s e l f ) :
+p r i n t( "A" )
+def func2(self): pass
+class B(A ) :
+def func1 ( s e l f ) :
+p r i n t( "B" )
+f o r x i n [A ( ) , B ( ) ] :
+x . func1 ( )
+x.func2()
+Dr. Nguyen Hua Phung Case Study: Python 12 / 1
+Page 63:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 64:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x) => address of object 3 which x points to
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 65:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x) => address of object 3 which x points to
+id(y) => same above address => x, y -> same object
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 66:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x) => address of object 3 which x points to
+id(y) => same above address => x, y -> same object
+id(z) => z points to different object
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 67:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 68:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 69:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 70:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 71:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y => False
+id(x) == id(y)
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 72:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y => False
+id(x) == id(y) => False
+x == y
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 73:
+Some other issues
+id(): address of the speciﬁed object
+x,y,z = 3,3,4
+id(x)
+id(y)
+id(z)
+is vs. ==
+is: True just when they are same object
+==: True even when they are different objects but their
+attributes are equal
+x,y = [1,2,3],[1,2,3]
+x is y => False
+id(x) == id(y) => False
+x == y => True
+Dr. Nguyen Hua Phung Case Study: Python 13 / 1
+Page 74:
+Some other issues
+Context manager by with statement
+with <expression> as <variable>:
+<stmt−list>
+<expression> must return an object which has
+__enter__ and __exit__ methods
+The with statement is executed like:
+<variable> = <expression>
+<variable>.__enter__()
+<stmt_list>
+<variable>.__exit__()
+__exit__ method is always executed before the
+control goes out of the <stmt_list>
+used for managing resources: ﬁle, database,...
+with open(’abc.txt’,’r’) as f:
+print(f.read())
+f.closed
+Dr. Nguyen Hua Phung Case Study: Python 14 / 1
+Page 75:
+Some other issues
+Context manager by with statement
+with <expression> as <variable>:
+<stmt−list>
+<expression> must return an object which has
+__enter__ and __exit__ methods
+The with statement is executed like:
+<variable> = <expression>
+<variable>.__enter__()
+<stmt_list>
+<variable>.__exit__()
+__exit__ method is always executed before the
+control goes out of the <stmt_list>
+used for managing resources: ﬁle, database,...
+with open(’abc.txt’,’r’) as f:
+print(f.read())
+f.closed
+Dr. Nguyen Hua Phung Case Study: Python 14 / 1
+Page 76:
+Some other issues
+Context manager by with statement
+with <expression> as <variable>:
+<stmt−list>
+<expression> must return an object which has
+__enter__ and __exit__ methods
+The with statement is executed like:
+<variable> = <expression>
+<variable>.__enter__()
+<stmt_list>
+<variable>.__exit__()
+__exit__ method is always executed before the
+control goes out of the <stmt_list>
+used for managing resources: ﬁle, database,...
+with open(’abc.txt’,’r’) as f:
+print(f.read())
+f.closed
+Dr. Nguyen Hua Phung Case Study: Python 14 / 1
+Page 77:
+Some other issues
+Context manager by with statement
+with <expression> as <variable>:
+<stmt−list>
+<expression> must return an object which has
+__enter__ and __exit__ methods
+The with statement is executed like:
+<variable> = <expression>
+<variable>.__enter__()
+<stmt_list>
+<variable>.__exit__()
+__exit__ method is always executed before the
+control goes out of the <stmt_list>
+used for managing resources: ﬁle, database,...
+with open(’abc.txt’,’r’) as f:
+print(f.read())
+f.closed
+Dr. Nguyen Hua Phung Case Study: Python 14 / 1
+Page 78:
+Some other issues
+Context manager by with statement
+with <expression> as <variable>:
+<stmt−list>
+<expression> must return an object which has
+__enter__ and __exit__ methods
+The with statement is executed like:
+<variable> = <expression>
+<variable>.__enter__()
+<stmt_list>
+<variable>.__exit__()
+__exit__ method is always executed before the
+control goes out of the <stmt_list>
+used for managing resources: ﬁle, database,...
+with open(’abc.txt’,’r’) as f:
+print(f.read())
+f.closed
+Dr. Nguyen Hua Phung Case Study: Python 14 / 1
+Page 79:
+Some other issues
+Context manager by with statement
+with <expression> as <variable>:
+<stmt−list>
+<expression> must return an object which has
+__enter__ and __exit__ methods
+The with statement is executed like:
+<variable> = <expression>
+<variable>.__enter__()
+<stmt_list>
+<variable>.__exit__()
+__exit__ method is always executed before the
+control goes out of the <stmt_list>
+used for managing resources: ﬁle, database,...
+with open(’abc.txt’,’r’) as f:
+print(f.read())
+f.closed => True
+Dr. Nguyen Hua Phung Case Study: Python 14 / 1
+Page 80:
+References I
+[1] Python Tutorial, http:w3schools.com/python, 10 08 2020.
+[2] Python Programming Language, https://www.
+geeksforgeeks.org/python-programming-language/,
+10 08 2020.
+[3] Python Tutorial,
+https://www.tutorialspoint.com/python, 10 08 2020.
+[4] Introduction to Python 3,
+https://realpython.com/python-introduction/, 10 08
+2020.
+Dr. Nguyen Hua Phung Case Study: Python 15 / 1

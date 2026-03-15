@@ -1,0 +1,317 @@
+Page 1:
+Object-Oriented Programming in
+Scala
+Dr. Nguyen Hua Phung
+HCMC University of Technology, Viet Nam
+08, 2016
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 1 / 29
+Page 2:
+Outline
+1 OOP Introduction
+2 Scala
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 2 / 29
+Page 3:
+Object-Oriented Programming Goals
+Programs as collections of collaborating objects
+Object has public interface, hidden implementation
+Objects are classﬁed according to their behavior
+Objects may represent real-world entities or entities
+that produce services for a program
+Objects may be reusable across programs
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 4 / 29
+Page 4:
+Introduction To OOP Languages
+There are many object-oriented programming (OOP)
+languages
+Some are pure OOP language (e.g., Smalltalk).
+Newer languages do not support other paradigms but
+use their imperative structures (e.g., Java and C♯).
+Some support procedural and data-oriented
+programming (e.g., Ada and C++).
+Some support functional program (e.g., Scala)
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 5 / 29
+Page 5:
+Some Important Features of OOP
+Abstract data types
+Encapsulation
+Information Hiding
+Class Hierarchy
+Inheritance
+Polymorphism - Dynamic Binding
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 6 / 29
+Page 6:
+Data Abstraction
+An abstract data type is data type that satisﬁes the
+following two conditions:
+Encapsulation:
+Attributes and operations are combined in a single
+syntactic unit
+compiled separately
+Information Hiding:
+The access to members are controlled
+Reliability increased
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 7 / 29
+Page 7:
+Information Hiding
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 8 / 29
+Page 8:
+ADT Example
+Operations on a stack:
+create(stack)
+destroy(stack)
+empty(stack)
+push(stack,element)
+pop(stack)
+top(stack)
+Client code:
+. . .
+create ( stk1 ) ;
+push ( stk1 , color1 ) ;
+push ( stk1 , color2 ) ;
+i f ( ! empty ( stk1 ) )
+temp = top ( stk1 ) ;
+. . .
+Implementation can be adjacent or linked list. Client: don’t
+care!
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 9 / 29
+Page 9:
+Class Hierarchy
+A class may have some Subclasses
+A class may have one/many Superclass(es)
+Animal
+Fish
+Whale
+Mammal
+Dog Cat
+WingedAnimal
+Bat
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 10 / 29
+Page 10:
+Inheritance
+A subclass is able to inherit non-private members of
+its superclasses
+A subclass can add its own members and override
+its inherited members
+Single vs. multiple inheritance
+Inheritance increases the reusability in OOP
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 11 / 29
+Page 11:
+Diamond Problem in Multiple Inheritance
+A
+B
+D
+C
+if D inherits from B and C different versions of the
+same behaviour, which version will be effective in D?
+this problem, called diamond problem, is solved
+differently in different OO language
+is there the diamond problem in Java?
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 12 / 29
+Page 12:
+Class vs. Object; Method vs. Message
+Class vs. Object
+A class deﬁnes the abstract characteristics of a thing
+its attributes or properties and
+its behaviors or methods or features.
+A Dog has fur and is able to bark
+An object is a particular instance of a class.
+Lassie is a dog
+Method vs. Message
+A method describes a behavior of an object.
+A dog can bark
+A message is a process at which a method of an
+object is invoked.
+Lassie barks
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 13 / 29
+Page 13:
+Polymorphism
+Polymorphism: different objects can respond to the
+same message in different ways.
+Dynamic binding
+Point
+x,y
+draw()
+Circle radius
+draw()
+p.draw()
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 14 / 29
+Page 14:
+Other Concepts
+There are two kinds of variables in a class:
+Class variables
+Instance variables
+There are two kinds of methods in a class:
+Class methods – accept messages to the class
+Instance methods – accept messages to objects
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 15 / 29
+Page 15:
+Scala
+Invented by Martin Ordesky at EPFL, Lausanne,
+Switzerland.
+Similar to Java
+Work smoothly with Java
+Run on Java Virtual Machine
+OOP + FP
+Include lexer and parser generator
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 17 / 29
+Page 16:
+Classes and Objects in Scala
+Class
+class [1]
+abstract class [5]
+trait [2]
+case class [3]
+Object
+new <class name>
+<case class name>
+object
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 18 / 29
+Page 17:
+Example [7]
+class Rational ( n : I n t , d : I n t ) {
+r e q u i r e ( d != 0)
+private val g = gcd ( n . abs , d . abs )
+private def gcd ( a : I n t , b : I n t ) : I n t =
+i f ( b == 0) a else gcd ( b , a % b )
+val numer = n / g
+val denom = d / g
+def this ( n : I n t ) = this ( n , 1)
+def + ( t h a t : Rational ) : Rational =
+new Rational (
+numer ∗ t h a t . denom + t h a t . numer ∗ denom ,
+denom ∗ t h a t . denom
+)
+override def t o S t r i n g = numer + " / " + denom
+}
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 19 / 29
+Page 18:
+Example on Abstract class [4]
+abstract class Element {
+def contents : Array [ S t r i n g ] / / no body : abstract
+val height = contents . length
+val width =
+i f ( height == 0) 0 else contents ( 0 ) . length
+}
+class ArrayElement ( conts : Array [ S t r i n g ] )
+extends Element {
+def contents : Array [ S t r i n g ] = conts
+}
+class LineElement ( s : S t r i n g )
+extends ArrayElement ( Array ( s ) ) {
+override def width = s . length
+override def height = 1
+}
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 20 / 29
+Page 19:
+Example on Object [1]
+object Element {
+def elem ( contents : Array [ S t r i n g ] ) : Element =
+new ArrayElement ( contents )
+def elem ( l i n e : S t r i n g ) : Element =
+new LineElement ( l i n e )
+}
+val space = Element . elem ( " " )
+val h e l l o = Element . elem ( Array ( " h e l l o " , " world " ) )
+Which kind of Element will be assigned to space and
+hello?
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 21 / 29
+Page 20:
+Example on Case Class [3]
+abstract class Expr
+case class Var (name : S t r i n g ) extends Expr
+case class Number (num: Double ) extends Expr
+case class UnOp( operator : String , arg : Expr )
+extends Expr
+case class BinOp ( operator : String ,
+l e f t : Expr , r i g h t : Expr ) extends Expr
+val v = Var ( " x " )
+val op = BinOp ( " + " , Number ( 1 ) , v )
+v . name
+op . l e f t
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 22 / 29
+Page 21:
+Example 1 on Traits [9]
+Reusability:
+abstract class Bird
+t r a i t F l y i n g {
+def flyMess : S t r i n g
+def f l y ( ) = p r i n t l n ( flyMess )
+}
+t r a i t Swimming {
+def swim ( ) = p r i n t l n ( " I ’m swimming " )
+}
+class Penguin extends Bird with Swimming
+class Hawk extends Bird with Swimming with F l y i n g {
+val flyMess = " I ’m a good f l y e r "
+}
+class F r i g a t e b i r dextends Bird with F l y i n g {
+val flyMess = " I ’m an e x c e l l e n t f l y e r "
+}
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 23 / 29
+Page 22:
+Example 2 on Traits [2]
+Stackable Modiﬁcations:
+abstract class IntQueue {
+def get ( ) : I n t
+def put ( x : I n t ) }
+class BasicIntQueue extends IntQueue {
+private val buf = new ArrayBuffer [ I n t ]
+def get ( ) = buf . remove ( 0 )
+def put ( x : I n t ) { buf += x } }
+t r a i t Doubling extends IntQueue {
+abstract override def put ( x : I n t ) { super . put (2 ∗ x ) } }
+t r a i t Incrementing extends IntQueue {
+abstract override def put ( x : I n t ) { super . put ( x + 1 ) } }
+val queue =
+new BasicIntQueue with Incrementing with Doubling
+queue . put (10)
+queue . get ( ) //???
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 24 / 29
+Page 23:
+Scala Hierarchy [8]
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 25 / 29
+Page 24:
+Access Modiﬁers [6] in Scala
+public
+protected
+private
+protected[<name>]
+private[<name>]
+Example,
+package Assignment
+. . .
+protected [ Assignment ] val f i e l d 1 = 100
+private [ t h i s ] val f i e l d 2 = 2;
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 26 / 29
+Page 25:
+Summary
+What are still in your mind?
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 27 / 29
+Page 26:
+References I
+[1] Classes and Objects, http://www.artima.com/pins1ed/
+classes-and-objects.html, 19 06 2014.
+[2] Traits, http://www.artima.com/pins1ed/traits.html,
+19 06 2014.
+[3] Case Class and Pattern Matching, http://www.artima.com/
+pins1ed/case-classes-and-pattern-matching.html ,
+19 06 2014.
+[4] Abstract Members, http:
+//www.artima.com/pins1ed/abstract-members.html,
+19 06 2014.
+[5] Compositions and Inheritance, http://www.artima.com/
+pins1ed/composition-and-inheritance.html, 19 06
+2014.
+[6] Packages and Imports, http://www.artima.com/pins1ed/
+packages-and-imports.html, 19 06 2014.
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 28 / 29
+Page 27:
+References II
+[7] Functional Objects, http://www.artima.com/pins1ed/
+functional-objects.html, 19 06 2014.
+[8] Scala Hierarchy, http:
+//www.artima.com/pins1ed/scalas-hierarchy.html,
+19 06 2014.
+[9] Learning Scala part seven -Traits, http://joelabrahamsson.
+com/learning-scala-part-seven-traits/ , 19 06 2014.
+Dr. Nguyen Hua Phung Object-Oriented Programming in Scala 29 / 29

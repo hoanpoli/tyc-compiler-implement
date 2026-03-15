@@ -1,0 +1,686 @@
+Page 1:
+Case Study: Python
+Functional Programming
+Dr. Nguyen Hua Phung
+HCMC University of Technology, Viet Nam
+08, 2020
+Dr. Nguyen Hua Phung Case Study: Python 1 / 1
+Page 2:
+Functional Programming
+Immutable Data
+lambda function
+First-class functions
+High-order functions: map, ﬁlter, reduce
+Closure
+Decorator
+Dr. Nguyen Hua Phung Case Study: Python 2 / 1
+Page 3:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 4:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 5:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 6:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4)
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 7:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 8:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 9:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+x(3,4)
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 10:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+x(3,4) => 7
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 11:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+x(3,4) => 7
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 12:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+x(3,4) => 7
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 13:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+x(3,4) => 7
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 14:
+Lambda function
+Syntax:
+lambda ( <param >( , <param ) ∗ ) ? : <exp>
+For example,
+lambda a,b: a + b
+(lambda a,b: a + b)(3,4) => 7
+x = lambda a,b: a + b
+x(3,4) => 7
+Anonymous function
+Any number of parameters
+Body is just one expression
+Used in high-order functions
+Dr. Nguyen Hua Phung Case Study: Python 3 / 1
+Page 15:
+First-class function
+A function is treated as any other value, i.e. it is
+assigned to a variable
+def foo ( a , b ) : pass
+x = foo
+x ( 3 , 4 )
+passed into another function as a parameter
+def foo ( f , x ) :
+return f ( x )
+foo ( lambda a : a ∗∗ 2 , 4)
+returned as a value
+def f ( x ) :
+def g ( y ) :
+return x ∗ y
+return g
+m = f ( 3 )
+m( 4 )
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 16:
+First-class function
+A function is treated as any other value, i.e. it is
+assigned to a variable
+def foo ( a , b ) : pass
+x = foo
+x ( 3 , 4 )
+passed into another function as a parameter
+def foo ( f , x ) :
+return f ( x )
+foo ( lambda a : a ∗∗ 2 , 4)
+returned as a value
+def f ( x ) :
+def g ( y ) :
+return x ∗ y
+return g
+m = f ( 3 )
+m( 4 )
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 17:
+First-class function
+A function is treated as any other value, i.e. it is
+assigned to a variable
+def foo ( a , b ) : pass
+x = foo
+x ( 3 , 4 )
+passed into another function as a parameter
+def foo ( f , x ) :
+return f ( x )
+foo ( lambda a : a ∗∗ 2 , 4) => 16
+returned as a value
+def f ( x ) :
+def g ( y ) :
+return x ∗ y
+return g
+m = f ( 3 )
+m( 4 )
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 18:
+First-class function
+A function is treated as any other value, i.e. it is
+assigned to a variable
+def foo ( a , b ) : pass
+x = foo
+x ( 3 , 4 )
+passed into another function as a parameter
+def foo ( f , x ) :
+return f ( x )
+foo ( lambda a : a ∗∗ 2 , 4) => 16
+returned as a value
+def f ( x ) :
+def g ( y ) :
+return x ∗ y
+return g
+m = f ( 3 )
+m( 4 )
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 19:
+First-class function
+A function is treated as any other value, i.e. it is
+assigned to a variable
+def foo ( a , b ) : pass
+x = foo
+x ( 3 , 4 )
+passed into another function as a parameter
+def foo ( f , x ) :
+return f ( x )
+foo ( lambda a : a ∗∗ 2 , 4) => 16
+returned as a value
+def f ( x ) :
+def g ( y ) :
+return x ∗ y
+return g
+m = f ( 3 )
+m( 4 ) => 12
+Dr. Nguyen Hua Phung Case Study: Python 4 / 1
+Page 20:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 21:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 22:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 23:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+=> [97.7, 98.6, 99.5, 100.4, 102.2]
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 24:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 25:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7])) => [5,7,9]
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 26:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 27:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+list(map(lambda c: c % 2 == 1, [0,1,2,3,4,5]))
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 28:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+list(map(lambda c: c % 2 == 1, [0,1,2,3,4,5])) => [1,3,5]
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 29:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+list(map(lambda c: c % 2 == 1, [0,1,2,3,4,5]))
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 30:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+list(map(lambda c: c % 2 == 1, [0,1,2,3,4,5]))
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+from functools import reduce
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 31:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+list(map(lambda c: c % 2 == 1, [0,1,2,3,4,5]))
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+from functools import reduce
+reduce(lambda x,y: x+y,[1,2,3,4])
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 32:
+High-order functions: map, ﬁlter, reduce
+map(<function>,<sequence>): apply <function> to
+each element of <sequence> and return an iterator
+cels = [36.5, 37, 37.5, 38, 39]
+fahr = list(map(lambda c: (ﬂoat(9) / 5) * c + 32,cels))
+list(map(lambda x,y: x + y,[1,2,3],[4,5,6,7]))
+ﬁlter(<function>,<sequence>) return an iterator that
+contains elements in <sequence> for which
+<function> returns True
+list(map(lambda c: c % 2 == 1, [0,1,2,3,4,5]))
+reduce(<function>,<sequence>(,<initial>)?): if
+<sequence> is [s1,s2,s3], reduce return
+function(function(s1,s2),s3) or
+function(function(function(<initial>,s1),s2),s3)
+from functools import reduce
+reduce(lambda x,y: x+y,[1,2,3,4]) => 10
+Dr. Nguyen Hua Phung Case Study: Python 5 / 1
+Page 33:
+Example
+class Exp (ABC) : pass
+class I n t L i t ( Exp ) : # v a l : i n t
+class BinExp ( Exp ) : #op : s t r , l e f t : Exp , r i g h t : Exp
+exp = [12 , ( "+" , 23) , ( " −" , 1 4 ) ]
+reduce ( lambda acc , ele :
+BinExp ( ele [ 0 ] , acc , I n t L i t ( ele [ 1 ] ) ) ,
+exp [ 1 : ] , I n t L i t ( exp [ 0 ] ) )
+BinExp
+"-" BinExp
+"+" IntLit(12) IntLit(23)
+IntLit(14)
+acc = IntLit(exp[0])
+for ele in exp[1:]:
+acc = BinExp(ele[0],
+acc,
+IntLit(exp[1]))
+Dr. Nguyen Hua Phung Case Study: Python 6 / 1
+Page 34:
+Example
+class Exp (ABC) : pass
+class I n t L i t ( Exp ) : # v a l : i n t
+class BinExp ( Exp ) : #op : s t r , l e f t : Exp , r i g h t : Exp
+exp = [12 , ( "+" , 23) , ( " −" , 1 4 ) ]
+reduce ( lambda acc , ele :
+BinExp ( ele [ 0 ] , acc , I n t L i t ( ele [ 1 ] ) ) ,
+exp [ 1 : ] , I n t L i t ( exp [ 0 ] ) )
+BinExp
+"-" BinExp
+"+" IntLit(12) IntLit(23)
+IntLit(14)
+acc = IntLit(exp[0])
+for ele in exp[1:]:
+acc = BinExp(ele[0],
+acc,
+IntLit(exp[1]))
+Dr. Nguyen Hua Phung Case Study: Python 6 / 1
+Page 35:
+Example
+class Exp (ABC) : pass
+class I n t L i t ( Exp ) : # v a l : i n t
+class BinExp ( Exp ) : #op : s t r , l e f t : Exp , r i g h t : Exp
+exp = [12 , ( "+" , 23) , ( " −" , 1 4 ) ]
+reduce ( lambda acc , ele :
+BinExp ( ele [ 0 ] , acc , I n t L i t ( ele [ 1 ] ) ) ,
+exp [ 1 : ] , I n t L i t ( exp [ 0 ] ) )
+BinExp
+"-" BinExp
+"+" IntLit(12) IntLit(23)
+IntLit(14)
+acc = IntLit(exp[0])
+for ele in exp[1:]:
+acc = BinExp(ele[0],
+acc,
+IntLit(exp[1]))
+Dr. Nguyen Hua Phung Case Study: Python 6 / 1
+Page 36:
+Closure
+Closure is a function object together with an
+environment.
+def power ( y ) :
+def inner ( x ) :
+return x ∗∗ y
+return inner
+square= power ( 2 )
+square ( 5 )
+Dr. Nguyen Hua Phung Case Study: Python 7 / 1
+Page 37:
+Closure
+Closure is a function object together with an
+environment.
+def power ( y ) :
+def inner ( x ) :
+return x ∗∗ y
+return inner
+square= power ( 2 )
+square ( 5 ) => 25
+Dr. Nguyen Hua Phung Case Study: Python 7 / 1
+Page 38:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) )
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 39:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) )
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 40:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) ) => 12
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 41:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+@log_decorator
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) )
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 42:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+@log_decorator
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) )
+=> foo is running
+=> 12
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 43:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+@log_decorator
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) )
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 44:
+Decorator
+Decorator allows to modify the behavior of function
+or class without permanently modifying it.
+@log_decorator
+def foo ( x , y ) :
+return x∗y
+print ( foo ( 3 , 4 ) )
+def foo ( x , y ) :
+return x∗y
+foo = log_decorator ( foo )
+print ( foo ( 3 , 4 ) )
+How?
+def log_decorator ( func ) :
+def inner ( ∗ arg ) :
+print ( func . __name__+" i s running " )
+return func ( ∗ arg )
+return inner
+Dr. Nguyen Hua Phung Case Study: Python 8 / 1
+Page 45:
+References I
+[1] Python Tutorial, http:w3schools.com/python, 10 08 2020.
+[2] Python Programming Language, https://www.
+geeksforgeeks.org/python-programming-language/,
+10 08 2020.
+[3] Python Tutorial,
+https://www.tutorialspoint.com/python, 10 08 2020.
+[4] Introduction to Python 3,
+https://realpython.com/python-introduction/, 10 08
+2020.
+Dr. Nguyen Hua Phung Case Study: Python 9 / 1
