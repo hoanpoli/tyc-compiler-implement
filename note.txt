@@ -222,3 +222,36 @@ W5: Naming, scoping and referencing environment
 	Sub1   A//2, D//1, Sub2 - cục bộ,  B//1, C//1, Sub1 (k cục bộ)
 	Sub2   C//2, D//2 - local, Sub2, A, Sub1, B
 	
+
+
+W6 - Type
+	- Scalar Type:
+		+ Kiểu nguyên có dấu: Lưu dạng bù 2 ( thập phân -> bù 1 (đổi 0->1, 1->0) -> bù 2 (cộng thêm 1))
+			Ví dụ: 8 bit của -126 dạng bù 2 là: 10000010 ( 01111110  -> 10000001 -> 10000010)
+		
+		+ Kiểu số thực: theo chuẩn IEEE-754
+			- Xác định dấu (Sign bit) : 1 (âm), 0 (dương/không dấu)
+			- Phần nguyên: Đổi sang nhị phân
+			- Phần thập phân: Đổi sang nhị phân bằng cách nhân 2 sau đó lấy phần nguyên , xấp xỉ đến mức nào thì dừng ở đó.
+			Ví dụ: -25.45 
+				- Dấu âm: 1
+				- Phần nguyên 25: 11001
+				- Phần thập phân: 0.45 x 2 = 0.9 -> 0
+								  0.9 x 2 = 1.8 -> 1
+								  0.8 x 2 = 1.6 -> 1
+								  0.6 x 2 = 1.2 -> 1
+								  0.2 x 2 = 0.4 -> 0
+								  0.4 x 2 = 0.8 -> 0
+								  0.8 x 2 = 1.6 -> 1
+								  0.6 x 2 = 1.2 -> 1
+								  ........
+								  => 0.45 = .01110011......
+				=> -25.45 = 11001.01110011
+		+ Kiểu Boolean
+		+ Kiểu Unicode
+		+ Kiểu dữ liệu có thứ tự:
+			- Kiểu Enum: 
+			- Kiểu Miền con (subrange type): type sv = array[1..50] of string;
+
+
+
