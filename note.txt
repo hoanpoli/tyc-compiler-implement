@@ -225,8 +225,18 @@ W5: Naming, scoping and referencing environment
 
 
 W6 - Type
-	- Scalar Type:
-		+ Kiểu nguyên có dấu: Lưu dạng bù 2 ( thập phân -> bù 1 (đổi 0->1, 1->0) -> bù 2 (cộng thêm 1))
+	+ Kiểu dl là tập hợp các giá trị đồng nhất về hình thức và hành vi
+	+ 1 hệ thống kiểu:
+		- Bao gồm tập hợp các kiểu được định nghĩa trước
+		- Cơ chế định nghĩa 1 kiểu dữ liệu mới (Ví dụ: trong C++ có struct)
+		- Cơ chế điều khiển kiểu: 
+			+ Tương đương kiểu
+			+ Tương thích Kiểu
+			+ Suy diễn kiểu
+		- Kiểm tra kiểu tĩnh (lúc biên dịch), động (kiểm tra khi thực thi)
+	- Scalar Type (Kiểu nguyên tố - không thể phân chia thành các kiểu con, có thể tạo ra kiểu lơn hơn, đôi khi có thể hỗ trợ bởi phàn cứng máy tính): 
+		+ Kiểu nguyên (Integer)
+			- Khi hỗ trợ có dấu: Lưu dạng bù 2 ( thập phân -> bù 1 (đổi 0->1, 1->0) -> bù 2 (cộng thêm 1))
 			Ví dụ: 8 bit của -126 dạng bù 2 là: 10000010 ( 01111110  -> 10000001 -> 10000010)
 		
 		+ Kiểu số thực: theo chuẩn IEEE-754
@@ -253,5 +263,186 @@ W6 - Type
 			- Kiểu Enum: 
 			- Kiểu Miền con (subrange type): type sv = array[1..50] of string;
 
+	- Composite Type (Kiểu dữ liệu tổng hợp):
+		+ Có nhiều thành phần, và có thể truy cập đến từng thành phần con
+		+ Các kiểu của từng thành phần có thể giống hoặc khác nhau
+		+ Số lượng thành phần có thể cố định hoặc thay đổi (stack, )
+		+ Có các tác vụ trên toàn bộ hoặc trên từng thành phần
+		+ Có thể các tác vụ thêm vào hoặc bớt ra
+		+ Có thể có các tác vụ tạo hoặc huỷ bỏ 
+
+		- Array Types:
+			+ Phần lớn ngôn ngữ thì các thành phần trên array là giống nhau
+			+ Truy xuất thành phần dùng index
+			+ 3 vùng bộ nhớ tuỳ cách khai báo
+				- Static: static int x[10]; hoặc khai báo trong vùng toàn cục
+				- Stack: 
+					- int x[10] (Fixed stack); 
+					- int x[n] (Dynamic stack); 
+					- hoặc khai báo trong vùng cục bộ
+				- Heap: 
+					- Dynamic : int *x = new int[n];
+					- Fixed heap: int *x = new int[10];
+			+ Một số ngôn ngữ hỗ khợ khởi tạo giá trị cho  1 array: int x[] = {1, 2, 3, 4, 5};
+			+ Jagged array: arr[3][7] , 
+			+ Rectangular array: kích thước bằng nhau: arr[3, 7] 
+			+ Một số ngôn ngữ cho truy xuất dãy con: 
+				Vd: vector = [1, 2, 3, 4]  -> vector[1:3]
+			+ Hiện thực 1 cái array
+				- Mảng 1 chiều: address(list[k]) = address(list[lower_bound]) + ((k - lower_bound) * element_size)
+					VD: Cho biết int x[10]; kích thước của 1 đối tượng int là 4, địa chỉ bắt đầu của x là 1000, địa chỉ của x[5] là bn?
+					Ta có: lower_bound = 0, element_size = 4, k = 5
+					=> address(x[5]) = 1000 + ((5 - 0) * 4) = 1000 + 20 = 1020
+
+				- Mảng 2 chiều (Row-Major Order - Ưu tiên hàng): Các hàng được xếp liên tiếp. Location(a[i,j]) = Alpha + (((i - row_lb) * n) + (j - col_lb)) * E (Trong đó Alpha là địa chỉ gốc, n là số cột, E là kích thước phần tử).
+					VD: Cho biết int x[5][7]; kích thước của 1 đối tượng int là 4, địa chỉ bắt đầu của x là 1000, địa chỉ của x[3][4] là bn?
+					Ta có: row_lb = 0, col_lb = 0, n = 7 (số cột), E = 4 (kích thước đối tượng), i = 3 (vị trí hàng cần tính), j = 4 (vị trí cột cần tính)
+					=> address(x[3][4]) = 1000 + (((3 - 0) * 7) + (4 - 0)) * 4 = 1000 + ((21 + 4) * 4) = 1000 + (25 * 4) = 1000 + 100 = 1100
+
+				- Mảng 2 chiều (Column-Major Order - Ưu tiên cột): Các cột xếp liên tiếp (Dùng trong Fortran). Location(a[i,j]) = Alpha + (((j - col_lb) * m) + (i - row_lb)) * E (m là số hàng).
+					VD: Cho biết int x[5][7]; kích thước của 1 đối tượng int là 4, địa chỉ bắt đầu của x là 1000, địa chỉ của x[3][4] là bn?
+					Ta có: row_lb = 0, col_lb = 0, m = 5 (số hàng), E = 4 (kích thước đối tượng), i = 3 (vị trí hàng cần tính), j = 4 (vị trí cột cần tính)
+					=> address(x[3][4]) = 1000 + (((4 - 0) * 5) + (3 - 0)) * 4 = 1000 + ((20 + 3) * 4) = 1000 + (23 * 4) = 1000 + 92 = 1092
+
+				- Mảng 3 chiều (Row-Major Order - Ưu tiên hàng): Các hàng được xếp liên tiếp. Location(a[i,j,k]) = Alpha + (((i - row_lb) * n * p) + ((j - col_lb) * p) + (k - depth_lb)) * E (Trong đó Alpha là địa chỉ gốc, n là số cột, p là số lớp, E là kích thước phần tử).
+					VD: Cho biết int x[4][6][5]; kích thước của 1 đối tượng int là 4, địa chỉ bắt đầu của x là 1000, địa chỉ của x[2][4][3] là bn?
+					Ta có: row_lb = 0, col_lb = 0, depth_lb = 0, n = 6 (số cột), p = 5 (số lớp), E = 4 (kích thước đối tượng), i = 2 (vị trí hàng cần tính), j = 4 (vị trí cột cần tính), k = 3 (vị trí lớp cần tính)
+					=> address(x[2][4][3]) = 1000 + (((2 - 0) * 6 * 5) + ((4 - 0) * 5) + (3 - 0)) * 4 = 1000 + ((60 + 20 + 3) * 4) = 1000 + (83 * 4) = 1000 + 332 = 1332
+
+				- Công thức chung cho mảng n chiều (Row-Major Order - Ưu tiên hàng): Location(a[i1,i2,...,in]) = Alpha + (((i1 - lb1) * n2 * n3 * ... * nn) + ((i2 - lb2) * n3 * ... * nn) + ... + (in - lbn)) * E
+
+			+ Dãy kết hợp: Đánh chỉ số bằng key. VD: dt = [{"name", "H"}; {"age", 20}; {"address", "Hà Nội"}] , tương tự kiểu Map trên 1 số  ngôn ngữ
+
+		- String Types:
+			- String là 1 dãy các ký tự, có thể coi là 1 mảng các ký tự
+			- String có thể được coi là 1 kiểu dữ liệu nguyên tố hoặc 1 kiểu dữ liệu tổng hợp
+
+		- Record Types:
+			- Các thành phần có thể khác nhau
+			- Làm sao để truy cập thành phần của 1 record
+			- Có cho phép cách rút gọn
+			- Trong OOP objects được coi là Record
+			- Phép gán / So sánh/ Khởi tạo
+			- Hiện thực 1 cái record
+				+ Độ lệch (Offset): Compiler chuyển tên trường thành khoảng cách byte so với địa chỉ gốc.
+				+ Căn chỉnh dữ liệu (Data Alignment): Phần cứng yêu cầu địa chỉ dữ liệu phải là bội số của một số byte nhất định (ví dụ: char-1, short-2, int-4, long-4, float-4, double-8).
+				+ Đệm (Padding): Compiler chèn các byte trống ("vùng nhớ chết") để đảm bảo căn chỉnh:
+					- Giữa các trường khi trường tiếp theo yêu cầu alignment lớn hơn.
+					- Cuối bản ghi để tổng kích thước là bội số của alignment của trường lớn nhất.
+
+				+ Ví dụ: struct Student {
+					char data1;
+					int data2;
+					char data3;
+					short data4;
+					char data5;
+				} -> size of struct là: 16 bytes
+					- data1: 1 byte (offset 0 - padding 3 bytes)
+					- data2: 4 bytes (offset 4)
+					- data3: 1 byte (offset 8 - padding 1 byte)
+					- data4: 2 bytes (offset 10)
+					- data5: 1 byte (offset 12 - padding 3 bytes)
+				ví dụ 2:
+				struct A {
+					int a;
+					double b;
+					float c;
+				};
+
+				struct B {
+					double a;
+					float b;
+					int c;
+					};
+				Assume that the size of int, float and double are 4, 4, and 8, respectively. What are the size of struct A and B? -> struct A: 24 bytes, struct B: 16 bytes
+					- struct A:
+						- int a: 4 bytes (offset 0 - padding 4 bytes)
+						- double b: 8 bytes (offset 8 - padding 8 bytes)
+						- float c: 4 bytes (offset 16 - padding 4 bytes)
+					- struct B:
+						- double a: 8 bytes (offset 0 - padding 8 bytes)
+						- float b: 4 bytes (offset 8 - padding 4 bytes)
+						- int c: 4 bytes (offset 12)
+
+	- Type Checking
+		- Biểu thức kiểu: 
+			- Arrays: array(I, T) , ví dụ:int t[10] => array(0..9, int)
+			- Records: T1 x T2 , ví dụ: struct {int a; float b;} =>  record((a x int) x (b x float))
+			- Functions: T1 -> T2 , ví dụ:int foo(int a, float b) => (int x float) -> int
+
+			Ví dụ thêm: 
+			- int => int
+			- int s => s
+			- int *p => pointer(int)
+			- template <class T> struct vd(T a, T b[3]) => record((a x T) x (b x array(0..2, T)))
+
+			- x: array [1..10] of record
+				a: array [5..10] of integer;
+				b: record
+					c: real;
+					d: array[1..3] of real;
+				end;
+			end;  ==> array(1..10, record((a * array(5..10, int)) * (b * record((c * real) * (d * array(1..3, real))))))
+		
+		- Kiểm tra kiểu: Kiểm tra tĩnh (thời gian biên dịch) và kiểm tra động (thời gian chạy)
+			+ Kiểm tra tĩnh: Suy diễn kiểu
 
 
+	- Kiểu trên Python
+		+ Kiểu Scalar: int, float, bool, complex 
+		+ Kiểu Sequence: list, tuple, range
+		+ Kiểu Mapping: dict
+		+ Kiểu Set: set, frozenset
+		+ Kiểu Binary: bytes, bytearray, memoryview
+		+ Kiểu None: NoneType
+
+		- Motivation: tạo 1 list từ 1 list khác  
+			lst = [<exp> for ele in <another list> (if <cond>)?]
+
+			VD: list1 = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
+				list2 = [sum(x) for x in list1] => [6, 9, 30]
+				list3 = [x * 2 for x in list1 if len(x) > 2] => [[2, 4, 6], [12, 14, 16, 18]]
+				list4 = [sum(x) for x in list1 if len(x) > 2] => [6, 30]
+				list5 = [x for x in list1 for y in x if y > 2] => [3, 4, 5, 6, 7, 8, 9]
+		- Indexing and Slicing
+			x = [1, 2, 'a', 'c', 4.3]
+			x[-1] => 4.3 
+
+			slicing: x[start:end:step]
+					x[1:3] => [2, 'a']
+					x[1:] => [2, 'a', 'c', 4.3]
+					x[:-1] => [1, 2, 'a', 'c']
+					x[:] => [1, 2, 'a', 'c', 4.3] đây là 1 list mới
+					x[1:4:2] => [2, 'c']
+					x[::2] => [1, 'a', 4.3]
+					x[::-1] => [4.3, 'c', 'a', 2, 1]
+
+		- Tuples and Ranges
+			+ Tuples giống list nhưng khác ở chỗ:
+				- Dùng ngoặc đơn () thay vì ngoặc vuông []
+				- Không thể thay đổi giá trị sau khi tạo
+			+ Ranges: cũng là immutable, nhưng không lưu trữ tất cả các giá trị mà chỉ lưu trữ start, stop, step
+				VD: rang(start?, stop, step?)
+					list(range(10)) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+					list(range(1, 5)) => [1, 2, 3, 4]
+					list(range(1, 10, 2)) => [1, 3, 5, 7, 9]
+					list(range(10, 1, -2)) => [10, 8, 6, 4, 2]
+					for x in range(1, 5, 2):
+						print(x) => 1, 3
+					
+		- Dictionary: keys -> any hashable type, value -> any type
+			x = { 'f' : 'Teo', 'age' : 20, 'address' : 'Hà Nội'}
+			x['f'] => 'Teo'
+			x['age'] => 20
+			x['address'] => 'Hà Nội'
+			x['age'] = 21 -> thêm thành phần mới
+			x['city'] = 'Hà Nội' -> thêm thành phần mới
+			del x['age'] -> xóa thành phần
+			x => {'f': 'Teo', 'address': 'Hà Nội', 'city': 'Hà Nội'}
+
+		- Set:
+			{1, 2, 3} == {1, 3, 2} => true
+			{1, 2, 3} == { 1,2,2,3,3,3,3} => true
+			{1, 2, 3} == { 1,2,2,3,3,3,3,4} => false
+			x = {1, 'a', True} , có thể add, remove, nhưng không thể sửa phần tử
+		- Frozenset: Giống set x = ({1, 2, 3}) , không thể add, remove, sửa phần tử
