@@ -1,0 +1,84 @@
+Cho một variant record trên ngôn ngữ Ada được khai báo như sau:
+
+type PaymentType is (Cash, Check, Credit);
+
+    -- The_Type is called the discriminant of the type
+    type Transaction(The_Type: PaymentType := Cash) is record
+    
+        Amount: Integer;
+
+        case The_Type is
+            when Cash =>
+                Discount: boolean;
+            when Check =>
+                CheckNumber: Positive;
+            when Credit =>
+                CardNumber: String(1..9);
+                Expiration: String(1..9);
+        end case;
+    end record;
+Giả sử các kiểu PaymentType, boolean, Integer,Positive,String(1..9) lần lượt có kích thước là 1, 1, 2, 2, và 10 bytes. Hãy cho biết kích thước của Transaction là bao nhiêu bytes (không xem xét vấn đề padding)?
+
+Ta tính kích thước của **variant record** trong Ada như sau:
+
+### 1. Các thành phần cố định (luôn có)
+
+* Discriminant `The_Type`: 1 byte
+* `Amount: Integer`: 2 bytes
+
+**1 + 2 = 3 bytes**
+---
+
+### 2. Phần variant (case)
+
+Chỉ **một nhánh được dùng tại runtime**, nhưng khi cấp phát bộ nhớ, phải lấy **kích thước lớn nhất trong các nhánh**.
+
+Các nhánh:
+* `Cash`:
+  * `Discount: boolean` → 1 byte
+* `Check`:
+  * `CheckNumber: Positive` → 2 bytes
+* `Credit`:
+  * `CardNumber: String(1..9)` → 10 bytes
+  * `Expiration: String(1..9)` → 10 bytes
+    Tổng: **20 bytes**
+
+Lấy max:
+**max(1, 2, 20) = 20 bytes**
+
+### 3. Tổng kích thước Transaction
+
+[
+3 + 20 = 23
+]
+
+**Kích thước của `Transaction` = 23 bytes**
+
+
+2. type paytype = (salaried,hourly); 
+
+var employee : record
+
+     id    : integer;
+     dept: integer;
+     age  : integer;
+     case payclass: paytype of 
+
+            salaried: (monthlyrate : real;startdate : integer); 
+
+            hourly: (rateperhour : real;reghours : integer;overtime : integer); 
+
+end;
+
+Giả sử các kiểu paytime, real và integer đều có kích thước là 4. Hỏi kích thước của employee là bao nhiêu byte? Lưu ý cần tính cả padding 
+
+
+
+3. Cho kiểu số thực dấu chấm động trên ngôn ngữ X được lưu trữ tương tự chuẩn IEEE-754 chỉ khác ở kích thước các miền. Số bit của miền dấu(sign) là 1 (0 nếu số dương và nếu số âm), miền số mũ (exponent) là 3, miền fraction là 5. Hãy viết chuỗi bit của một số thực thập phân 4.8
+
+
+
+4. Cho khai báo của một kiểu dãy 3 chiều trên ngôn ngữ TEST như sau: var x : array [6..8,6..8, 3..5] of integer; Giả sử các thành phần của một kiểu dãy trên ngôn ngữ TEST sẽ được lưu theo hàng (row-major order). Hãy cho biết các thành phần của dãy x được sắp xếp trên bộ nhớ theo trình tự như thế nào?
+
+
+https://chatgpt.com/g/g-p-6978a6a1618c81918ed7fa0924482b9b-mon-nguyen-ly-ngon-ngu-lap-trinh/c/69c1d6f4-6fb4-8320-ace0-673dbc5d4111

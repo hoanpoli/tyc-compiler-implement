@@ -168,6 +168,15 @@ W5: Naming, scoping and referencing environment
 	- Implicit Heap Dynamic: 
 	
 	vd: malloc()
+
+
+	giải quyết vấn dề visit scoping dể phát hiện UndeclareErrror:
+	Dùng stack với đỉnh là MT cục bộ, đáy là MT toàn cục, ở giữa là MT không cục bộ
+
+	- [ [list MT cục bộ], [list MT không cục bộ từ phạm vị cục bộ -> toàn cục], [list MT toàn cục]]
+	- Khai báo: Chỉ kiểm tra đỉnh stack
+	- Sử dụng: Kiểm tra từ đỉnh đến đáy, kiểm tra ở đâu thì dừng lại, tất cả k có thì lỗi
+
 	
 	
 - Block
