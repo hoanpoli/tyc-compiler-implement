@@ -76,65 +76,57 @@ from .static_error import (
 )
 
 
-class Symbol:
-    def __init__(self, name: str, kind: str, ty: Optional[TyCType] = None, params: Optional[List[TyCType]] = None):
-        self.name = name
-        self.kind = kind  # 'Variable', 'Function', 'Struct', 'Parameter'
-        self.ty = ty
-        self.params = params  # List of parameter types for functions
-
-
-class Scope:
-    def __init__(self, parent: Optional['Scope'] = None):
-        self.symbols: Dict[str, Symbol] = {}
-        self.parent = parent
-
-    def define(self, name: str, symbol: Symbol):
-        self.symbols[name] = symbol
-
-    def resolve(self, name: str) -> Optional[Symbol]:
-        if name in self.symbols:
-            return self.symbols[name]
-        if self.parent:
-            return self.parent.resolve(name)
-        return None
-
-    def contains_locally(self, name: str) -> bool:
-        return name in self.symbols
-
-
 class StaticChecker(ASTVisitor):
     def __init__(self):
-        self.global_scope = Scope()
-        self.current_scope = self.global_scope
+        # Stack of scopes, each scope is a list of AST nodes (declarations)
+        self.scopes: List[List[Union[VarDecl, FuncDecl, StructDecl, Param]]] = [[]]
         self.loop_depth = 0
         self.in_switch = False
         self.current_func_ty = None  # Expected return type of current function
+        self.current_func_node = None # Current FuncDecl node being visited
+        self.current_func_vars: List[VarDecl] = [] # Track local auto vars for inference check
         self._add_builtins()
 
     def _add_builtins(self):
-        # readInt() -> int
-        self.global_scope.define("readInt", Symbol("readInt", "Function", IntType(), []))
-        # readFloat() -> float
-        self.global_scope.define("readFloat", Symbol("readFloat", "Function", FloatType(), []))
-        # readString() -> string
-        self.global_scope.define("readString", Symbol("readString", "Function", StringType(), []))
-        # printInt(int) -> void
-        self.global_scope.define("printInt", Symbol("printInt", "Function", VoidType(), [IntType()]))
-        # printFloat(float) -> void
-        self.global_scope.define("printFloat", Symbol("printFloat", "Function", VoidType(), [FloatType()]))
-        # printString(string) -> void
-        self.global_scope.define("printString", Symbol("printString", "Function", VoidType(), [StringType()]))
-
-    def check_program(self, node: Program):
-        return self.visit(node, None)
+        # Built-ins are added as simulated FuncDecl nodes (no body)
+        builtins = [
+            FuncDecl(IntType(), "readInt", [], BlockStmt([])),
+            FuncDecl(FloatType(), "readFloat", [], BlockStmt([])),
+            FuncDecl(StringType(), "readString", [], BlockStmt([])),
+            FuncDecl(VoidType(), "printInt", [Param(IntType(), "arg")], BlockStmt([])),
+            FuncDecl(VoidType(), "printFloat", [Param(FloatType(), "arg")], BlockStmt([])),
+            FuncDecl(VoidType(), "printString", [Param(StringType(), "arg")], BlockStmt([])),
+        ]
+        for b in builtins:
+            self.define(b)
 
     def enter_scope(self):
-        self.current_scope = Scope(self.current_scope)
+        self.scopes.append([])
 
     def exit_scope(self):
-        if self.current_scope.parent:
-            self.current_scope = self.current_scope.parent
+        if len(self.scopes) > 1:
+            self.scopes.pop()
+
+    def define(self, node: Union[VarDecl, FuncDecl, StructDecl, Param], global_scope: bool = False):
+        if global_scope:
+            self.scopes[0].append(node)
+        else:
+            self.scopes[-1].append(node)
+
+    def lookup(self, name: str) -> Optional[Union[VarDecl, FuncDecl, StructDecl, Param]]:
+        for scope in reversed(self.scopes):
+            for node in scope:
+                if node.name == name:
+                    return node
+        return None
+
+    def contains_locally(self, name: str) -> bool:
+        for node in self.scopes[-1]:
+            if node.name == name:
+                return True
+        return False
+    def check_program(self, node: Program):
+        return self.visit(node, None)
 
     def is_same_type(self, t1: Optional[TyCType], t2: Optional[TyCType]) -> bool:
         if t1 is None or t2 is None:
@@ -164,41 +156,38 @@ class StaticChecker(ASTVisitor):
         return "Static checking passed"
 
     def visit_struct_decl(self, node: StructDecl, o: Any = None):
-        if self.global_scope.contains_locally(node.name):
+        if self.contains_locally(node.name):
             raise Redeclared("Struct", node.name)
         
-        # Structs are global, symbols map to member dict
-        members = {}
+        # Check member names unique and types valid
+        member_names = set()
         for member in node.members:
-            if member.name in members:
-                raise Redeclared("Variable", member.name) # Spec says members must be unique
+            if member.name in member_names:
+                raise Redeclared("Variable", member.name)
+            member_names.add(member.name)
             
-            # Check if member type is valid (especially for other structs)
             m_ty = self.visit(member.member_type, o)
             if isinstance(m_ty, StructType):
-                if not self.global_scope.resolve(m_ty.struct_name):
+                if not self.lookup(m_ty.struct_name):
                     raise UndeclaredStruct(m_ty.struct_name)
-            
-            members[member.name] = m_ty
-            
-        self.global_scope.define(node.name, Symbol(node.name, "Struct", ty=None, params=members))
+                    
+        self.define(node, global_scope=True)
 
     def visit_member_decl(self, node: MemberDecl, o: Any = None):
         # Handled in visit_struct_decl
         pass
 
     def visit_func_decl(self, node: FuncDecl, o: Any = None):
-        if self.global_scope.contains_locally(node.name):
+        if self.contains_locally(node.name):
             raise Redeclared("Function", node.name)
         
         # Check return type if explicitly specified
         ret_ty = self.visit(node.return_type, o) if node.return_type else None
         if isinstance(ret_ty, StructType):
-            if not self.global_scope.resolve(ret_ty.struct_name):
+            if not self.lookup(ret_ty.struct_name):
                 raise UndeclaredStruct(ret_ty.struct_name)
 
         # Process parameters
-        params_ty = []
         param_names = set()
         for p in node.params:
             if p.name in param_names:
@@ -207,34 +196,36 @@ class StaticChecker(ASTVisitor):
             
             p_ty = self.visit(p.param_type, o)
             if isinstance(p_ty, StructType):
-                if not self.global_scope.resolve(p_ty.struct_name):
+                if not self.lookup(p_ty.struct_name):
                     raise UndeclaredStruct(p_ty.struct_name)
-            params_ty.append(p_ty)
             
-        # Define function in global scope BEFORE checking body to allow recursion?
-        # WAIT, spec says "declared before use". Does this mean the body can call itself?
-        # Usually yes. But if "declaration" means the whole block, then NO.
-        # Let's assume we can call ourselves.
-        func_symbol = Symbol(node.name, "Function", ret_ty, params_ty)
-        self.global_scope.define(node.name, func_symbol)
+        # Define function in global scope
+        self.define(node, global_scope=True)
         
         # Check body
         self.enter_scope()
-        self.current_func_symbol = func_symbol
+        self.current_func_node = node
         self.current_func_ty = ret_ty # Might be None (auto)
+        old_vars = self.current_func_vars
+        self.current_func_vars = []
         
-        # Add parameters to local scope
-        for i, p in enumerate(node.params):
-            self.current_scope.define(p.name, Symbol(p.name, "Parameter", params_ty[i]))
+        for p in node.params:
+            self.define(p)
             
         self.visit(node.body, o)
         
+        # Check if any local variables still have no type (TypeCannotBeInferred)
+        for var_node in self.current_func_vars:
+            if var_node.var_type is None:
+                raise TypeCannotBeInferred(var_node.name)
+        
         # If return type was auto and was NOT inferred, it must be Void
-        if func_symbol.ty is None:
-            func_symbol.ty = VoidType()
+        if node.return_type is None and self.current_func_ty is None:
+            node.return_type = VoidType()
             
         self.exit_scope()
-        self.current_func_symbol = None
+        self.current_func_vars = old_vars
+        self.current_func_node = None
         self.current_func_ty = None
 
     def visit_param(self, node: Param, o: Any = None):
@@ -254,6 +245,8 @@ class StaticChecker(ASTVisitor):
         return VoidType()
 
     def visit_struct_type(self, node: StructType, o: Any = None):
+        if not self.lookup(node.struct_name):
+            raise UndeclaredStruct(node.struct_name)
         return StructType(node.struct_name)
 
     # Statements
@@ -264,7 +257,7 @@ class StaticChecker(ASTVisitor):
         self.exit_scope()
 
     def visit_var_decl(self, node: VarDecl, o: Any = None):
-        if self.current_scope.contains_locally(node.name):
+        if self.contains_locally(node.name):
             raise Redeclared("Variable", node.name)
             
         var_ty = self.visit(node.var_type, o) if node.var_type else None
@@ -279,14 +272,16 @@ class StaticChecker(ASTVisitor):
                 if rhs_ty is None:
                     raise TypeCannotBeInferred(node.name)
                 var_ty = rhs_ty
+                node.var_type = var_ty # Update node for auto
             else:
                 # Type x = expr;
                 if not self.is_same_type(var_ty, rhs_ty):
                     raise TypeMismatchInStatement(node)
         
-        # If still None (auto without init), it must be inferred later.
-        # Track that it needs inference.
-        self.current_scope.define(node.name, Symbol(node.name, "Variable", var_ty))
+        if node.var_type is None:
+            self.current_func_vars.append(node)
+            
+        self.define(node)
 
     def visit_if_stmt(self, node: IfStmt, o: Any = None):
         cond_ty = self.visit(node.condition, o)
@@ -359,10 +354,10 @@ class StaticChecker(ASTVisitor):
             # We are in an 'auto' function, infer from this return
             if isinstance(expr_ty, VoidType):
                 # If first return is empty, func is Void
-                self.current_func_symbol.ty = VoidType()
+                self.current_func_node.return_type = VoidType()
                 self.current_func_ty = VoidType()
             else:
-                self.current_func_symbol.ty = expr_ty
+                self.current_func_node.return_type = expr_ty
                 self.current_func_ty = expr_ty
         else:
             # Check compatibility
@@ -489,8 +484,19 @@ class StaticChecker(ASTVisitor):
             raise TypeMismatchInExpression(node)
             
         l_ty = self.visit(node.lhs, o)
-        r_ty = self.visit(node.rhs, l_ty) # Pass LHS type to RHS for struct literals
         
+        # If LHS is unknown (auto), try to infer it from RHS
+        if l_ty is None:
+            r_ty = self.visit(node.rhs, None)
+            if r_ty is not None:
+                if isinstance(node.lhs, Identifier):
+                    decl = self.lookup(node.lhs.name)
+                    if isinstance(decl, VarDecl) and decl.var_type is None:
+                        decl.var_type = r_ty
+                        l_ty = r_ty
+        else:
+            r_ty = self.visit(node.rhs, l_ty) # Pass LHS type to RHS for struct literals
+            
         if not self.is_same_type(l_ty, r_ty):
             raise TypeMismatchInExpression(node)
             
@@ -501,65 +507,74 @@ class StaticChecker(ASTVisitor):
         if not isinstance(obj_ty, StructType):
             raise TypeMismatchInExpression(node)
             
-        struct_sym = self.global_scope.resolve(obj_ty.struct_name)
-        if not struct_sym or struct_sym.kind != "Struct":
+        decl = self.lookup(obj_ty.struct_name)
+        if not isinstance(decl, StructDecl):
             raise UndeclaredStruct(obj_ty.struct_name)
             
-        members = struct_sym.params # We stored member dict in params
-        if node.member not in members:
-            raise TypeMismatchInExpression(node) # Member not found
-            
-        return members[node.member]
+        # Find member in StructDecl
+        for member in decl.members:
+            if member.name == node.member:
+                return member.member_type
+                
+        raise TypeMismatchInExpression(node) # Member not found
 
     def visit_func_call(self, node: FuncCall, o: Any = None):
-        func_sym = self.global_scope.resolve(node.name)
-        if not func_sym or func_sym.kind != "Function":
+        decl = self.lookup(node.name)
+        if not isinstance(decl, FuncDecl):
             raise UndeclaredFunction(node.name)
             
-        if len(node.args) != len(func_sym.params):
+        if len(node.args) != len(decl.params):
             raise TypeMismatchInExpression(node)
             
         for i, arg in enumerate(node.args):
-            arg_ty = self.visit(arg, func_sym.params[i]) # Pass param type for struct literals
-            if not self.is_same_type(arg_ty, func_sym.params[i]):
+            p_ty = decl.params[i].param_type
+            arg_ty = self.visit(arg, p_ty) # Pass param type for struct literals
+            if not self.is_same_type(arg_ty, p_ty):
                 raise TypeMismatchInExpression(node)
                 
-        return func_sym.ty
+        return decl.return_type
 
     def visit_identifier(self, node: Identifier, o: Any = None):
-        sym = self.current_scope.resolve(node.name)
-        if not sym:
+        decl = self.lookup(node.name)
+        if not decl:
             raise UndeclaredIdentifier(node.name)
             
-        if sym.ty is None:
-            # Type still unknown (auto without init)
-            if o is not None:
-                # Infer from context (passed in 'o')
-                # But wait, we should only infer if 'o' is a concrete type
-                if isinstance(o, (IntType, FloatType, StringType, StructType)):
-                    sym.ty = o
+        # Get type based on decl kind
+        if isinstance(decl, VarDecl):
+            ty = decl.var_type
+        elif isinstance(decl, Param):
+            ty = decl.param_type
+        else:
+            # Identifier used as expr but refers to Func or Struct name
+            raise TypeMismatchInExpression(node)
+            
+        if ty is None: # auto without init
+            if isinstance(o, (IntType, FloatType, StringType, StructType)):
+                if isinstance(decl, VarDecl):
+                    decl.var_type = o
+                    ty = o
             else:
                 # Still unknown
                 return None
         
-        return sym.ty
+        return ty
 
     def visit_struct_literal(self, node: StructLiteral, o: Any = None):
         # o should be the expected StructType
         if not isinstance(o, StructType):
             raise TypeMismatchInExpression(node)
             
-        struct_sym = self.global_scope.resolve(o.struct_name)
-        if not struct_sym or struct_sym.kind != "Struct":
+        decl = self.lookup(o.struct_name)
+        if not isinstance(decl, StructDecl):
             raise UndeclaredStruct(o.struct_name)
             
-        members = list(struct_sym.params.values())
-        if len(node.values) != len(members):
+        if len(node.values) != len(decl.members):
             raise TypeMismatchInExpression(node)
             
         for i, val in enumerate(node.values):
-            val_ty = self.visit(val, members[i])
-            if not self.is_same_type(val_ty, members[i]):
+            m_ty = decl.members[i].member_type
+            val_ty = self.visit(val, m_ty)
+            if not self.is_same_type(val_ty, m_ty):
                 raise TypeMismatchInExpression(node)
                 
         return o
