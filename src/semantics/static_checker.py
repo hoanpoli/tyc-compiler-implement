@@ -80,18 +80,6 @@ class StaticChecker(ASTVisitor):
     def __init__(self):
         pass
 
-    def _add_builtins(self, env: List[List[VarDecl | FuncDecl | StructDecl | Param]]):
-        builtins = [
-            FuncDecl(IntType(), "readInt", [], BlockStmt([])),
-            FuncDecl(FloatType(), "readFloat", [], BlockStmt([])),
-            FuncDecl(StringType(), "readString", [], BlockStmt([])),
-            FuncDecl(VoidType(), "printInt", [Param(IntType(), "arg")], BlockStmt([])),
-            FuncDecl(VoidType(), "printFloat", [Param(FloatType(), "arg")], BlockStmt([])),
-            FuncDecl(VoidType(), "printString", [Param(StringType(), "arg")], BlockStmt([])),
-        ]
-        for b in builtins:
-            env[0].append(b)
-
     def _lookup(self, name: str, env: List[List[VarDecl | FuncDecl | StructDecl | Param]]) -> Optional[VarDecl | FuncDecl | StructDecl | Param]:
         for scope in reversed(env):
             for node in scope:
@@ -107,7 +95,6 @@ class StaticChecker(ASTVisitor):
 
     def check_program(self, node: Program):
         env = [[]]
-        self._add_builtins(env)
         o = {
             "env": env,
             "loop": 0,
