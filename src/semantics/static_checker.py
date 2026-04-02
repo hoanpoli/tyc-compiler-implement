@@ -79,6 +79,9 @@ from .static_error import (
 class StaticChecker(ASTVisitor):
     def __init__(self):
         pass
+    
+    def visit_assign_stmt(self, node: AssignExpr, o: Any = None):
+        pass
 
     def _lookup(self, name: str, env: List[List[VarDecl | FuncDecl | StructDecl | Param]]) -> Optional[VarDecl | FuncDecl | StructDecl | Param]:
         for scope in reversed(env):
