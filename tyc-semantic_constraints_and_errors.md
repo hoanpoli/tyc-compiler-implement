@@ -32,7 +32,7 @@ The TyC static semantic checker must detect and report the following error types
 - `<identifier>`: Name of the redeclared identifier
 
 **Scope-specific Rules:**
-- **Global scope:** Functions and structs must have unique names
+- **Global scope:** Struct names must be unique among all struct declarations, and function names must be unique among all function declarations (no overloading). **Struct type names and function names use separate namespaces:** the same identifier may name both a struct type and a function (e.g. `struct foo { ... };` and `int foo(int x, int y) { ... }` are valid). Context disambiguates—type position in declarations vs. `(` in a call.
 - **Function scope:** Parameters must have unique names within the same function
 - **Local scope (block):** Variables must have unique names within the same block
 - **Shadowing:** Variables in nested blocks can shadow variables in outer scopes
@@ -54,6 +54,15 @@ int add(int x, int y) {
 }
 int add(int a, int b) {  // Redeclared(Function, add) - no function overloading
     return a + b;
+}
+
+// Valid: same identifier for a struct type and a function (separate global namespaces)
+struct foo {
+    int x;
+    int y;
+};
+int foo(int x, int y) {  // Not Redeclared: struct foo and function foo are distinct
+    return x + y;
 }
 
 // Error: Redeclared Variable in same block
@@ -153,7 +162,7 @@ void nested() {
 **Function Declaration Rules:**
 - Functions have global scope
 - Functions can be called from anywhere after declaration
-- Function names must be unique (no function overloading)
+- Function names must be unique among functions (no function overloading); a function name may match a struct type name
 - Built-in functions (`readInt`, `readFloat`, `readString`, `printInt`, `printFloat`, `printString`) are implicitly declared
 
 **Examples:**
@@ -199,7 +208,7 @@ void example() {
 **Struct Declaration Rules:**
 - Structs have global scope
 - Struct types can be used throughout the program after declaration
-- Struct names must be unique
+- Struct names must be unique among struct types (may match a function name—separate namespace)
 - Struct members cannot use `auto` - only explicit types are allowed
 
 **Examples:**
@@ -792,7 +801,7 @@ When multiple errors are present, report them in the following order:
 
 ### Scope Management
 
-- **Global scope:** Functions and structs
+- **Global scope:** Functions and structs (names are unique within each kind; struct names and function names may coincide—see Redeclared rules above)
 - **Function scope:** Parameters (visible throughout function body)
 - **Local scope (block):** Variables declared in blocks `{}`
 - **Nested scopes:** Inner scopes can shadow outer scopes
@@ -810,7 +819,7 @@ TyC uses complete type inference with the following rules:
 ### Type System Rules
 
 - **Strict typing:** No implicit type coercion except in arithmetic operations (int + float → float)
-- **No function overloading:** Function names must be unique
+- **No function overloading:** Function names must be unique among functions (struct and function names may coincide)
 - **Struct types:** Must be explicitly declared before use
 - **Void type:** Only used as function return type, not for variables or parameters
 
